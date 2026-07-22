@@ -83,7 +83,7 @@ Device node: `/dev/encript` (major 244, minor 0)
 ```
 Compiler:    GCC 4.9.4
 Build sys:   Buildroot 2017.05
-Target CPU:  ARM926EJ-S (ARMv5TEJ — dropper compiled for different CPU; actual SoC: Goke GK7102 ARM1176JZF-S)
+Target CPU:  ARM926EJ-S (ARMv5TEJ - dropper compiled for different CPU; actual SoC: Goke GK7102 ARM1176JZF-S)
 Kernel:      Linux 3.4.43-gk armv6l ("gk" = Goke, not "global kernel")
 libc:        uClibc (static, no runtime dependency)
 ```

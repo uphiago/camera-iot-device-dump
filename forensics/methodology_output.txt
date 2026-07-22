@@ -6,7 +6,7 @@
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 1: Persistence Mechanisms — the first thing to check            │
+│ LESSON 1: Persistence Mechanisms - the first thing to check            │
 └─────────────────────────────────────────────────────────────────────────┘
 
 When you gain access to ANY Linux system, the FIRST investigation is
@@ -43,23 +43,23 @@ WHY THIS IS SUSPICIOUS:
   4. The file date (Aug 2023) is consistent with a compromise nearly
      3 years prior to our investigation.
 
-THE CONCEPT — Linux Boot Process Persistence:
+THE CONCEPT - Linux Boot Process Persistence:
   /etc/init.d/S* scripts run at boot in numerical order (S01boot,
   S50telnet, S98test, etc.). The 'S' means 'Start', the number
   determines order. Malware often places itself at S98 or S99 to
   run last, after networking is up.
 
   Common persistence locations malware uses:
-    /etc/init.d/       — System V init scripts (what we found)
-    /etc/crontab       — Scheduled tasks
-    /etc/rc.local      — Another boot script
-    ~/.bashrc          — User shell startup
-    /etc/ld.so.preload — Library injection
-    systemd units      — On modern Linux
+    /etc/init.d/       - System V init scripts (what we found)
+    /etc/crontab       - Scheduled tasks
+    /etc/rc.local      - Another boot script
+    ~/.bashrc          - User shell startup
+    /etc/ld.so.preload - Library injection
+    systemd units      - On modern Linux
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 2: The Hex-Embedded Dropper — decoding the binary               │
+│ LESSON 2: The Hex-Embedded Dropper - decoding the binary               │
 └─────────────────────────────────────────────────────────────────────────┘
 
 THE SCENE:
@@ -68,7 +68,7 @@ THE SCENE:
 
 THE ACTION:
   The `echo -ne` command writes raw bytes to a file. Each \xNN is a single
-  byte in hexadecimal. The first bytes are \x7F \x45 \x4C \x46 — the ELF
+  byte in hexadecimal. The first bytes are \x7F \x45 \x4C \x46 - the ELF
   magic number.
 
   $ python3 -c "
@@ -92,7 +92,7 @@ THE ACTION:
   GCC: (Buildroot 2017.05) 4.9.4
   ARM926EJ-S
 
-WHY THIS TECHNIQUE — the hex-embedded dropper:
+WHY THIS TECHNIQUE - the hex-embedded dropper:
   The attacker faced a constraint: how to place an ARM binary on a device
   that has no compiler, no wget in initramfs, and might not have network
   at boot time.
@@ -107,7 +107,7 @@ WHY THIS TECHNIQUE — the hex-embedded dropper:
   This is the same technique used by many IoT botnets (Mirai, Gafgyt, etc.)
   for their initial dropper.
 
-THE CONCEPT — the `strings` command:
+THE CONCEPT - the `strings` command:
   $ strings <binary>  extracts all printable ASCII sequences.
   BEFORE using any disassembler, ALWAYS run strings.
   It often reveals URLs, IPs, filenames, credentials, and command lines
@@ -124,7 +124,7 @@ THE CONCEPT — the `strings` command:
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 3: ELF Binary Structure — reading the header                    │
+│ LESSON 3: ELF Binary Structure - reading the header                    │
 └─────────────────────────────────────────────────────────────────────────┘
 
 Every Linux executable starts with an ELF header. Let's dissect it.
@@ -168,7 +168,7 @@ Parsing the header manually (what readelf -h does):
   print(f'Section hdrs:  {e_shnum} at offset {e_shoff}')
   "
 
-THE CONCEPT — Program Headers vs Section Headers:
+THE CONCEPT - Program Headers vs Section Headers:
   Section headers (.text, .data, .rodata) are used by the LINKER at compile
   time. They are optional at runtime! The Linux kernel only reads Program
   Headers (PT_LOAD segments) to map the binary into memory.
@@ -178,7 +178,7 @@ THE CONCEPT — Program Headers vs Section Headers:
     - Static linking: runs on any kernel version, no libc mismatch
     - Stripped: makes reverse engineering harder, smaller file size
 
-THE CONCEPT — ARM syscall convention:
+THE CONCEPT - ARM syscall convention:
   On ARM Linux, system calls use:
     r7 = syscall number
     r0-r5 = arguments
@@ -190,7 +190,7 @@ THE CONCEPT — ARM syscall convention:
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 4: ARM Disassembly — understanding what the binary DOES          │
+│ LESSON 4: ARM Disassembly - understanding what the binary DOES          │
 └─────────────────────────────────────────────────────────────────────────┘
 
 Even with a partially corrupted transcription, we can understand the
@@ -232,7 +232,7 @@ from offset 0xc0 (entry point 0x000100c0):
 
   ... (the binary continues with socket setup and HTTP request construction)
 
-THE CONCEPT — How this maps to C code:
+THE CONCEPT - How this maps to C code:
 
   The binary is ~1924 bytes of statically-linked ARM code. Based on
   the strings we extracted, its logic is approximately:
@@ -264,15 +264,15 @@ THE CONCEPT — How this maps to C code:
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 5: Shell Script Forensics — the runner (/tmp/r)                 │
+│ LESSON 5: Shell Script Forensics - the runner (/tmp/r)                 │
 └─────────────────────────────────────────────────────────────────────────┘
 
 THE SCENE:
   The second hex dump in S98test decodes to a shell script that runs
   the actual malware payload. The hex starts with \x23\x21\x2F\x62\x69\x6E\x2F\x73\x68
-  which is "#!" followed by "/bin/sh" — the shebang for a shell script.
+  which is "#!" followed by "/bin/sh" - the shebang for a shell script.
 
-TECHNIQUE — hex-to-text decoding:
+TECHNIQUE - hex-to-text decoding:
   $ python3 -c "
   hex = open('runner_hex.txt').read()
   # Convert each \xNN to its ASCII byte
@@ -350,7 +350,7 @@ FORENSIC BREAKDOWN:
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 6: Command-line Flag Analysis — identifying the malware family   │
+│ LESSON 6: Command-line Flag Analysis - identifying the malware family   │
 └─────────────────────────────────────────────────────────────────────────┘
 
 The runner script launches /bin/omm with these flags:
@@ -377,7 +377,7 @@ FLAG ANALYSIS:
   -password=<string>
     XMRig pool password. Usually a worker-specific identifier or API
     token for the mining pool (not an actual "password" in the
-    traditional sense — more like a worker key).
+    traditional sense - more like a worker key).
 
 SIZE-BASED IDENTIFICATION:
   The expected file size is 2,222,096 bytes (~2.1 MB). This is the
@@ -401,13 +401,13 @@ IDENTIFICATION CONFIRMED:
   (Monero cryptocurrency miner) compiled for ARMv5TEJ.
 
   EMAIL TRACING:
-    hwansna@gmail.com — likely the attacker's Gmail account.
+    hwansna@gmail.com - likely the attacker's Gmail account.
     This email was used as the mining pool login identifier.
     It could be the actual account owner or a compromised account.
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 7: Infection Vector — how did the malware get there?            │
+│ LESSON 7: Infection Vector - how did the malware get there?            │
 └─────────────────────────────────────────────────────────────────────────┘
 
 The /etc/init.d/S98test was WORLD-WRITABLE:
@@ -468,7 +468,7 @@ THE ATTACK CHAIN (most likely):
 
 
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LESSON 8: IOC Extraction — building a threat intelligence report       │
+│ LESSON 8: IOC Extraction - building a threat intelligence report       │
 └─────────────────────────────────────────────────────────────────────────┘
 
 INDICATORS OF COMPROMISE (for sharing with CERT, ISPs, threat intel):
@@ -488,7 +488,7 @@ INDICATORS OF COMPROMISE (for sharing with CERT, ISPs, threat intel):
 
   ATTACKER ATTRIBUTION:
     Email:          hwansna@gmail.com
-    Mining pool:    (undetermined — would need omm binary to identify)
+    Mining pool:    (undetermined - would need omm binary to identify)
     C2 infra:       AS48031 (XSERVER, Ukraine/Latvia)
 
   TOOLCHAIN:
@@ -504,7 +504,7 @@ MITIGATIONS APPLIED:
 
 FURTHER HUNTING (if you want to go deeper):
     1. Check threat intel platforms for hwansna@gmail.com
-    2. Query Shodan/Censys for 86.38.203.214 — what else is hosted?
+    2. Query Shodan/Censys for 86.38.203.214 - what else is hosted?
     3. Check if /omm is detectable in VirusTotal by hash
     4. Search for ARM926EJ-S malware in public malware repos
     5. Check if other devices on your network show similar infections
@@ -538,7 +538,7 @@ FURTHER HUNTING (if you want to go deeper):
 │  5. FLAG ANALYSIS                                                        │
 │     -device-name, -accept-tos, -email, -password = XMRig signature     │
 │     File size 2.1MB = statically linked crypto miner                    │
-│     No decompilation needed — the flags tell the whole story.           │
+│     No decompilation needed - the flags tell the whole story.           │
 │                                                                         │
 │  6. INFECTION VECTOR RECONSTRUCTION                                      │
 │     World-writable init script + known CGI vulns explains how it        │

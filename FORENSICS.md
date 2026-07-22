@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Initial Reconnaissance — "What is this box?"
+## 1. Initial Reconnaissance - "What is this box?"
 
 ```
 Goal: Understand what the device IS, not just what it runs.
@@ -19,11 +19,11 @@ Goal: Understand what the device IS, not just what it runs.
 | Users | `cat /etc/passwd` | root, default (no password hash!) |
 | Processes | `ps aux` | ipc_server, onvif, telnetd, watchdog + suspicious entries |
 | Network | `netstat -tlnp` | 80 (HTTP), 554 (RTSP), 8080 (ONVIF), 23 (telnet) |
-| Shell history | `cat /root/.ash_history` | All investigation commands logged — found in JFFS2 dump |
+| Shell history | `cat /root/.ash_history` | All investigation commands logged - found in JFFS2 dump |
 
 ---
 
-## 2. Persistence Audit — "What runs at boot?"
+## 2. Persistence Audit - "What runs at boot?"
 
 ```
 Goal: Find how malware (or any unexpected software) survives reboots.
@@ -45,10 +45,10 @@ $ ls -la /etc/init.d/S98test
 ```
 
 **Red flags:**
-1. World-writable (rw-rw-rw-) — any process can modify it
-2. Name `test` — deliberately deceptive, not a service name
-3. Size 10,234 bytes — far too large for a simple init script
-4. Date Aug 22 2023 — 34 months old, no other file dates match
+1. World-writable (rw-rw-rw-) - any process can modify it
+2. Name `test` - deliberately deceptive, not a service name
+3. Size 10,234 bytes - far too large for a simple init script
+4. Date Aug 22 2023 - 34 months old, no other file dates match
 
 ### Normal init script vs. malware
 
@@ -65,7 +65,7 @@ telnetd -l /bin/sh &                 echo -ne '\x23\x21\x2F\x62...' > /tmp/r
 
 ---
 
-## 3. Binary Extraction — "What is this hex doing here?"
+## 3. Binary Extraction - "What is this hex doing here?"
 
 ```
 Goal: Extract and identify the embedded binary payloads.
@@ -90,15 +90,15 @@ dl.bin: ELF 32-bit LSB executable, ARM, EABI4 version 1 (SYSV),
 ```
 
 The file command reads the ELF magic bytes and header to identify:
-- **32-bit** — not 64-bit
-- **LSB** — little-endian byte order (ARM default on Linux)
-- **ARM** — target CPU architecture
-- **Statically linked** — no shared library dependencies
-- **Stripped** — debugging symbols removed (anti-analysis)
+- **32-bit** - not 64-bit
+- **LSB** - little-endian byte order (ARM default on Linux)
+- **ARM** - target CPU architecture
+- **Statically linked** - no shared library dependencies
+- **Stripped** - debugging symbols removed (anti-analysis)
 
 ---
 
-## 4. String Extraction — "What does this binary do?"
+## 4. String Extraction - "What does this binary do?"
 
 ```
 Goal: Understand program behavior without disassembling.
@@ -123,12 +123,12 @@ ARM926EJ-S
 
 | String | Forensic meaning |
 |--------|-----------------|
-| `GET /omm HTTP/1.0` | HTTP downloader — fetches a file from a web server |
+| `GET /omm HTTP/1.0` | HTTP downloader - fetches a file from a web server |
 | `86.38.203.214` | C2 server IP address |
-| `Connection: close` | HTTP/1.0 behavior — single request per connection |
-| `./omm` | Output filename — saves to current directory |
-| `NIF` | Response validation — checks if server returned valid data |
-| `Buildroot 2017.05` | Compilation environment — embedded Linux build system |
+| `Connection: close` | HTTP/1.0 behavior - single request per connection |
+| `./omm` | Output filename - saves to current directory |
+| `NIF` | Response validation - checks if server returned valid data |
+| `Buildroot 2017.05` | Compilation environment - embedded Linux build system |
 | `ARM926EJ-S` | Target CPU of dropper binary (compiled for ARMv5TEJ; actual SoC is Goke GK7102 ARM1176JZF-S ARMv6) |
 
 ### What the C code probably looks like
@@ -143,7 +143,7 @@ read() loop → write() to "./omm" → close()
 
 ---
 
-## 5. ELF Header Analysis — "What is the binary's structure?"
+## 5. ELF Header Analysis - "What is the binary's structure?"
 
 ```
 Goal: Understand the executable format: entry point, segments, target.
@@ -194,7 +194,7 @@ The binary has NO `PT_INTERP` segment (which would specify the dynamic linker). 
 
 ---
 
-## 6. Command-Line Flag Analysis — "What software is this?"
+## 6. Command-Line Flag Analysis - "What software is this?"
 
 ```
 Goal: Identify unknown software from its command-line arguments.
@@ -229,7 +229,7 @@ The runner script launches:
 ### File Size Confirmation
 
 - Expected size: **2,222,096 bytes**
-- This is ~2.1 MB — the exact size of a statically-linked XMRig ARM build
+- This is ~2.1 MB - the exact size of a statically-linked XMRig ARM build
 - Mirai bots are ~100 KB, shells are ~40 KB
 - Only cryptominers with OpenSSL are this large
 
@@ -237,7 +237,7 @@ The runner script launches:
 
 ---
 
-## 7. Shell Script Forensics — "How does the runner work?"
+## 7. Shell Script Forensics - "How does the runner work?"
 
 ```
 Goal: Understand the persistence and resilience mechanisms.
@@ -250,7 +250,7 @@ The second hex dump starts with `\x23\x21\x2F\x62\x69\x6E\x2F\x73\x68`:
 - `\x21` = `!`
 - `\x2F\x62\x69\x6E\x2F\x73\x68` = `/bin/sh`
 
-This is the **shebang** — the first two bytes of any shell script.
+This is the **shebang** - the first two bytes of any shell script.
 
 ### Full decode
 
@@ -262,16 +262,16 @@ print(script.decode('utf-8'))
 
 ### Resilience Mechanisms
 
-1. **Device fingerprinting** — MAC address → unique worker ID
-2. **Silent operation** — all output redirected to /dev/null
-3. **Integrity check** — file size verified before launch
-4. **Auto-recovery** — deleted/corrupted binary re-downloaded in <4 seconds
-5. **Dual transport** — HTTP primary, FTP fallback
-6. **Infinite loop** — runs until the system dies
+1. **Device fingerprinting** - MAC address → unique worker ID
+2. **Silent operation** - all output redirected to /dev/null
+3. **Integrity check** - file size verified before launch
+4. **Auto-recovery** - deleted/corrupted binary re-downloaded in <4 seconds
+5. **Dual transport** - HTTP primary, FTP fallback
+6. **Infinite loop** - runs until the system dies
 
 ---
 
-## 8. IOC Extraction — "What do we share with the security community?"
+## 8. IOC Extraction - "What do we share with the security community?"
 
 ```
 Goal: Produce actionable indicators for detection and blocking.

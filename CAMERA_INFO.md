@@ -459,7 +459,7 @@ See [MALWARE_ANALYSIS.md](MALWARE_ANALYSIS.md) for the full forensic report.
 - **Payload:** `/bin/omm` (~2.1MB XMRig static ARM build)
 - **Attacker email:** hwansna@gmail.com
 - **Persistence:** World-writable init script + infinite monitoring loop
-- **Status:** CLEANED — malware removed, system secured
+- **Status:** CLEANED - malware removed, system secured
 
 ### Files Involved
 | File | Purpose | Status |
@@ -470,9 +470,9 @@ See [MALWARE_ANALYSIS.md](MALWARE_ANALYSIS.md) for the full forensic report.
 | `/bin/omm` | XMRig miner (~2.1MB) | Never downloaded (downloads failing) |
 
 ### Related Documents
-- [MALWARE_ANALYSIS.md](MALWARE_ANALYSIS.md) — Full forensic breakdown
-- [FORENSICS.md](FORENSICS.md) — Step-by-step methodology
-- [IOCs.md](IOCs.md) — Indicators of compromise
+- [MALWARE_ANALYSIS.md](MALWARE_ANALYSIS.md) - Full forensic breakdown
+- [FORENSICS.md](FORENSICS.md) - Step-by-step methodology
+- [IOCs.md](IOCs.md) - Indicators of compromise
 
 ## Processos (ps via telnet)
 ```
@@ -518,7 +518,7 @@ Arquivos extraídos da camera e baixados via HTTP:
 ### Binários principais (/mnt/mtd/ipc/)
 | Arquivo | Tipo | Descrição |
 |---------|------|-----------|
-| `ipc_server` | **ZIP** (não ELF!) | Servidor principal (HTTP, RTSP, CGI) — 1MB comprimido |
+| `ipc_server` | **ZIP** (não ELF!) | Servidor principal (HTTP, RTSP, CGI) - 1MB comprimido |
 | `ipc_server.bak` | ZIP | Backup do ipc_server |
 | `onvif` | ELF 32-bit ARM | Servidor ONVIF/gSOAP |
 | `watchdog` | ELF 32-bit ARM | Watchdog daemon (não stripped) |
@@ -564,7 +564,7 @@ Interface web completa com HTML, JS, CSS:
 - Múltiplas interfaces: 4-canais (`mainpage4.html`, `view4.html`), 9-canais (`mainpage9.html`)
 
 ### /root/.ash_history
-Histórico completo da sessão de investigação — registra todos os comandos executados durante a descoberta e limpeza do malware.
+Histórico completo da sessão de investigação - registra todos os comandos executados durante a descoberta e limpeza do malware.
 
 ### Config files não documentados
 | Arquivo | Conteúdo |
