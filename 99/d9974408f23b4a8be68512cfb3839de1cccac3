@@ -1,0 +1,21 @@
+README.md
+  s_9b136eeab32680::t_95faac37ccdd78 5-6,12,15-16,26,31-33,35-36,42-45
+  s_9b136eeab32680::t_4099a9c55eeea2 47-53
+  s_9b136eeab32680::t_6ce9c984795d16 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "99d9974408f23b4a8be68512cfb3839de1cccac3",
+  "prompts": {},
+  "sessions": {
+    "s_9b136eeab32680": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_079891c56ffe9B95GJ8Gt4uhBG",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "uphiago <hollyvolks@hotmail.com>"
+    }
+  }
+}
