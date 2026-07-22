@@ -2,7 +2,7 @@
 
 Hipcam PTZ IP Camera (Goke GK7102 SoC, ARM1176JZF-S ARMv6, 600MHz)
 
-> **Blog post:** [Dissecting a 3 Year IoT Malware Infection](https://hiago.sh/blog/iot-malware-autopsy) — full narrative write-up at [hiago.sh](https://hiago.sh).
+> **Blog post:** [Dissecting a 3 Year IoT Malware Infection](https://www.hiago.sh/?post=iot-malware-autopsy) — full narrative write-up.
 
 ## Documents
 
