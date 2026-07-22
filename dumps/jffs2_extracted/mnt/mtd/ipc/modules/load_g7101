@@ -1,0 +1,69 @@
+#!/bin/sh
+
+DRV_PATH="/mnt/mtd/ipc/modules"
+
+insmod $DRV_PATH/dsp.ko
+insmod $DRV_PATH/vo.ko
+insmod $DRV_PATH/vi.ko
+insmod $DRV_PATH/isp.ko
+insmod $DRV_PATH/hw_crypto.ko
+insmod $DRV_PATH/media.ko
+insmod $DRV_PATH/audio.ko
+case "$?" in
+    0)
+	;;
+    *)
+  	echo "insert media module failed!"
+	exit 1
+	;;
+esac
+
+insmod $DRV_PATH/tv.ko
+case "$?" in
+    0)
+	;;
+    *)
+  	echo "insert cvbs module failed!"
+	exit 1
+	;;
+esac
+
+insmod $DRV_PATH/encipher.ko
+case "$?" in
+    0)
+	;;
+    *)
+	echo "insert encipher module failed!"
+	exit 1
+	;;
+esac
+
+default_sensor=ov2710
+case $1 in
+    --imx222 ) insmod $DRV_PATH/imx222.ko ;;
+    --ov2710 ) insmod $DRV_PATH/ov2710.ko ;;
+    --ov9710 ) insmod $DRV_PATH/ov9710.ko ;;
+    --ov9715 ) insmod $DRV_PATH/ov9710.ko ;;
+    --ar0130 ) insmod $DRV_PATH/ar0130.ko ;;
+    --ar0330 ) insmod $DRV_PATH/ar0330.ko ;;
+    --jxh42  ) insmod $DRV_PATH/jxh42.ko  ;;
+    --bg0701 ) insmod $DRV_PATH/bg0701.ko ;;
+    --sc1035 ) insmod $DRV_PATH/sc1035.ko ;;
+    --sc1145 ) insmod $DRV_PATH/sc1145.ko ;;
+    --gc1024 ) insmod $DRV_PATH/gc1024.ko ;;
+    --na )     echo "Init without sensor..." ;;
+    *)         echo "Default method to init without VI drivers..."
+               insmod $DRV_PATH/$default_sensor.ko ;;
+esac
+case "$?" in
+    0)
+	;;
+    *)
+  	echo "Insmod $1 failed!"
+	exit 1
+	;;
+esac
+
+
+exit $?
+

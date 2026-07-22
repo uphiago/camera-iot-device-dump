@@ -1,0 +1,62 @@
+--- iwconfig ra0 ---
+iwconfig ra0 2>&1
+Warning: Driver for device ra0 has been compiled with version 22
+of Wireless Extension, while this program supports up to version 20.
+Some things may be broken...
+
+ra0       Ralink STA  ESSID:"<SSID>"  Nickname:"MT7601STA"
+          Mode:Managed  Frequency=2.422 GHz  Access Point: CC:62:FE:B5:30:70   
+          Bit Rate=58.5 Mb/s   
+          RTS thr:off   Fragment thr:off
+          Encryption key:C3A9-0DD9-C561-F75A-2DC2-9353-B846-01E9   Security mode:restricted   Security mode:open
+          Link Quality=97/100  Signal level:-47 dBm  Noise level:-77 dBm
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+# 
+
+--- iwpriv ra0 ---
+iwpriv ra0 2>&1
+ra0       Available private ioctls :
+          set              (8BE2) : set 1024 char  & get   0      
+          connStatus       (0004) : set 1024 char  & get 2047 char 
+          driverVer        (0005) : set 1024 char  & get 2047 char 
+          bainfo           (0006) : set 1024 char  & get 2047 char 
+          descinfo         (0007) : set 1024 char  & get 2047 char 
+          radio_off        (000A) : set 1024 char  & get 2047 char 
+          radio_on         (000B) : set 1024 char  & get 2047 char 
+          show             (0015) : set 1024 char  & get 2047 char 
+          adhocEntry       (0016) : set 1024 char  & get 2047 char 
+          devinfo          (001A) : set 1024 char  & get 2047 char 
+          stainfo          (001B) : set 1024 char  & get 2047 char 
+          bbp              (8BE3) : set 2047 char  & get 2047 char 
+          mac              (8BE5) : set 1024 char  & get 1024 char 
+          rf               (8BF3) : set 2047 char  & get 2047 char 
+          e2p              (8BE7) : set 1024 char  & get 1024 char 
+          stat             (8BE9) : set   0       & get 2047 char 
+          get_site_survey  (8BED) : set   0       & get 1024 char 
+          wsc_cred_count   (0001) : set   1 int   & get   0      
+          wsc_cred_ssid    (0002) : set 128 char  & get   0      
+          wsc_cred_auth    (0003) : set 128 char  & get   0      
+          wsc_cred_encr    (0004) : set 128 char  & get   0      
+          wsc_cred_keyIdx  (0005) : set 128 char  & get   0      
+          wsc_cred_key     (0006) : set 128 char  & get   0      
+          wsc_cred_mac     (0007) : set 128 char  & get   0      
+          wsc_conn_by_idx  (0008) : set   1 int   & get   0      
+          wsc_auto_conn    (0009) : set   1 int   & get   0      
+          wsc_conf_mode    (000A) : set   1 int   & get   0      
+          wsc_mode         (000B) : set   1 int   & get   0      
+          wsc_pin          (000C) : set 128 char  & get   0      
+          wsc_ssid         (000D) : set 128 char  & get   0      
+          wsc_bssid        (0012) : set 128 char  & get   0      
+          wsc_start        (000E) : set   0 int   & get   0      
+          wsc_stop         (000F) : set   0 int   & get   0      
+          wsc_gen_pincode  (0010) : set   0 int   & get   0      
+          wsc_ap_band      (0011) : set   1 int   & get   0      
+
+# 
+
+--- iwconfig ra0 mode monitor ---
+i
+
+--- iwconfig (all) ---

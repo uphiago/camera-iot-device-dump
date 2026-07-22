@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>ipCAM</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT"> 
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getuserattr" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/user.js"></script>
+
+<script type="text/javascript">
+
+function on_load()
+{
+
+  load_form_atusername0();
+	load_form_atusername1();
+	load_form_atusername2();
+	load_form_atpassword0();
+	load_form_atpassword1();
+	load_form_atpassword2();
+}
+
+function do_submit()
+{
+	var s = document.getElementById("form_submit");
+	
+	if (!check_form_atpassword0())
+		return false;
+	if (!check_form_atpassword1())
+		return false;
+	if (!check_form_atpassword2())
+		return false;
+	
+	if (!check_form_username())
+		return false;
+	s.cururl.value =document.URL ;
+ 
+	submit_form_atpassword0();
+	submit_form_atpassword1();
+	submit_form_atpassword2();
+	
+	s.action="cgi-bin/hi3510/param.cgi";
+	s.submit();
+}
+</script>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<div id="page">
+
+<table width="70%" border="0" align="center" cellspacing="5" class="common">
+  <tr>
+    <td width="15%">&nbsp;</td>
+    <td width="15%">&nbsp;</td>
+    <td width="26%">&nbsp;</td>
+    <td width="26%">&nbsp;</td>
+    </tr>
+  <tr align="center">
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_purview);</script></span></td>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_username);</script></span></td>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_password);</script></span></td>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_repassword);</script></span></td>
+    </tr>
+  <tr align="center">
+    <td >admin</td>
+	<td><input id="form_atusername0" name="atusername1" type="atusername" size="10" maxlength="15"></td>
+    <td><input id="form_atpassword0" name="password1" type="password" size="25" maxlength="30"></td>
+    <td><input id="form_reatpassword0" name="repassword1" type="password" size="25" maxlength="30"></td>
+    </tr>
+  <tr align="center" style="display:none">
+    <td >user</td>
+    <td><input id="form_atusername1" name="atusername1" type="atusername" size="10" maxlength="15"></td>
+    <td><input id="form_atpassword1" name="password1" type="password" size="25" maxlength="30"></td>
+    <td><input id="form_reatpassword1" name="repassword1" type="password" size="25" maxlength="30"></td>
+    </tr>
+  <tr align="center" style="display:none">
+    <td >guest</td>
+    <td><input id="form_atusername2" name="atusername1" type="atusername" size="10" maxlength="15"></td>
+    <td><input id="form_atpassword2" name="password1" type="password" size="25" maxlength="30"></td>
+    <td><input id="form_reatpassword2" name="repassword1" type="password" size="25" maxlength="30"></td>
+    </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    </tr>
+  <tr>
+    <td colspan="4">
+		<table width="30%"  border="0" align="center" cellpadding="0" cellspacing="3">
+		<tr>
+		<td>
+		<button type="button" onClick="do_submit()" class="btn"><span><span>
+		<script language="JavaScript" type="text/javascript">document.write(str_btn_apply);</script></span></span></button>		</td>
+		<td>
+		<button type="button" onClick="JavaScript:location.reload(true)" class="btn"><span><span>
+		<script language="JavaScript" type="text/javascript">document.write(str_btn_cancel);</script></span></span></button>		</td>
+		</tr>
+		</table>	</td>
+    </tr>
+</table>
+
+<form method="post" id="form_submit">
+<input name="cmd" type="hidden" value="setuserattr">
+<input name="cururl" type="hidden"> 
+<input name="at_username0" type="hidden">
+<input name="at_newname0" type="hidden">
+<input name="at_password0" type="hidden">
+<input name="cmd" type="hidden" value="setuserattr">
+<input name="at_username1" type="hidden">
+<input name="at_newname1" type="hidden">
+<input name="at_password1" type="hidden">
+<input name="cmd" type="hidden" value="setuserattr">
+<input name="at_username2" type="hidden">
+<input name="at_newname2" type="hidden">
+<input name="at_password2" type="hidden">
+</form>
+
+</div>
+</body>
+</html>

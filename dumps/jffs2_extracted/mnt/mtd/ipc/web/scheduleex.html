@@ -1,0 +1,584 @@
+<html>
+<head>
+<title>IP Camera, Network Camera and Video Server Reviews, Articles, </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getscheduleex&-ename=md" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/scheduleex.js"></script>
+
+<script type="text/javascript">
+function on_load()
+{
+ load_form_timearea();
+}
+
+function do_submit()
+{
+	var s = document.getElementById("form_submit");
+	submit_form_timearea();
+
+	
+	s.cururl.value = document.URL;
+	s.action = "cgi-bin/hi3510/param.cgi";
+	s.submit();
+	
+}
+
+function showtimeitme()
+{
+	var f = document.getElementById("form_recplan");
+	
+	var i, j, classna;
+	
+	if (f.selectedIndex == 0)
+	{
+		classna = "newbg";
+	}
+	else
+	if (f.selectedIndex == 1)
+	{
+		classna = "common";
+	}
+	else
+		return;
+		
+		for (i=1;i<8;i++)
+		{
+			for (j=1;j<49;j++)
+			{
+				table1.rows[i].cells[j].className=classna;
+			}
+		}  	
+}
+
+function all_area()
+{
+	
+	var i, j, classna;
+
+		classna = "newbg";
+		
+		for (i=1;i<8;i++)
+		{
+			for (j=1;j<49;j++)
+			{
+				table1.rows[i].cells[j].className=classna;
+			}
+		}  	
+  	
+}
+
+function no_area()
+{
+	
+	var i, j, classna;
+
+		classna = "common";
+		for (i=1;i<8;i++)
+		{
+			for (j=1;j<49;j++)
+			{
+				table1.rows[i].cells[j].className=classna;
+			}
+		}  	
+  	
+}
+
+
+function on_tableclk(evt)
+{
+	var td = evt.srcElement||evt.target;//event.srcElement? event.srcElement: event.target;
+
+	var row, col;
+	
+	if(td.tagName!="TD") 
+   		return;
+	
+	//row = td.parentElement.rowIndex;
+//	col = td.cellIndex;
+	//alert("down 行号："+row+"列号："+col);
+	//document.title = "down 行号："+row+"列号："+col;
+	
+	if (row == 0)
+		return;
+	
+	if (col == 0)
+		return;
+
+	td.className=td.className=="newbg"?"common":"newbg";	
+	/*alert(table1.rows[row].cells[col].className);
+	if (table1.rows[row].cells[col].className == "newbg")
+		table1.rows[row].cells[col].className = "common";
+	else
+		table1.rows[row].cells[col].className = "newbg";	*/
+}
+
+</script>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+body {
+	background-color: #A2D0FF;
+}
+.newbg{
+background-color:#00CC00;
+}
+.light {
+      cursor: default;
+}
+-->
+</style></head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<div>
+<table width="90%" border="0" align="center" cellspacing="10" class="common">
+  <tr>
+    <td>　</td>
+    <td>　</td>
+  </tr>  
+  <tr>
+    <td width="30%"><span class="conspicuous thick"><script type="text/javascript">document.write(str_altime);</script></span></td>
+    <td width="70%">　</td>
+  </tr>
+  
+  <tr style="display:none">
+    <td><script type="text/javascript">document.write(str_alarmplan + colon);</script></td>
+    <td><select size="1" id="form_recplan" onchange=showtimeitme()>
+	<option value="0"><script type="text/javascript">document.write(str_alarmday);</script></option>
+	<option value="1"><script type="text/javascript">document.write(str_alarmclear);</script></option>
+	<option value="2" selected><script type="text/javascript">document.write(str_alermarea);</script></option>
+	</select></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+	<table border="1" width="1000" id="table1" cellspacing="1" bordercolor="#808080" class="light" onClick="on_tableclk(event)" >
+		<tr class="common">
+			<td width="94">&nbsp;</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;0</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;1</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;2</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;3</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;4</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;5</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;6</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;7</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;8</td>
+			<td colspan="2" align="center">&nbsp;&nbsp;9</td>
+			<td colspan="2" align="center">10</td>
+			<td colspan="2" align="center">11</td>
+			<td colspan="2" align="center">12</td>
+			<td colspan="2" align="center">13</td>
+			<td colspan="2" align="center">14</td>
+			<td colspan="2" align="center">15</td>
+			<td colspan="2" align="center">16</td>
+			<td colspan="2" align="center">17</td>
+			<td colspan="2" align="center">18</td>
+			<td colspan="2" align="center">19</td>
+			<td colspan="2" align="center">20</td>
+			<td colspan="2" align="center">21</td>
+			<td colspan="2" align="center">22</td>
+			<td colspan="2" align="center">23</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_sunday);</script></td>
+			 <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+                      <td width="12">&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_monday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_tuesday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_wednesday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_thursday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_friday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr class="common">
+			<td width="94"><script type="text/javascript">document.write(str_saturday);</script></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>	</td>
+  </tr>
+
+</table>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="3" width="25%">
+	<tbody>
+	<tr>
+	<td>
+	<button type="button" onClick="do_submit()" class="btn"><span><span>
+	&nbsp;<script type="text/javascript">document.write(str_btn_apply);</script>&nbsp;</span></span></button></td>
+	<td>
+	<button  type="button" onClick="all_area()" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_all_area)</script></span></span></button></td>
+	<td>
+	<button type="button" onClick="no_area()" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_no_area);</script></span></span></button></td>
+	</tr>
+	</tbody>
+</table>
+<form id="form_submit" method="post">
+	<input name="cmd" type="hidden" value="setplanrecattr">
+	<input name="cururl" type="hidden">
+	<input name="recswitch" type="hidden">
+	<input name="recstream" type="hidden">
+	<input name="planrec_time" type="hidden">
+	<input name="cmd" type="hidden" value="setscheduleex">
+	<input name="ename" type="hidden">
+	<input name="week0" type="hidden">
+	<input name="week1" type="hidden">
+	<input name="week2" type="hidden">
+	<input name="week3" type="hidden">
+	<input name="week4" type="hidden">
+	<input name="week5" type="hidden">
+	<input name="week6" type="hidden">
+</form>
+</div>
+</body>
+</html>

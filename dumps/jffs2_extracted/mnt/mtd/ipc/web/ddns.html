@@ -1,0 +1,222 @@
+<html>
+<head>
+<title>ipCAM</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT"> 
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getourddnsattr&cmd=getupnpattr&cmd=get3thddnsattr" type="text/javascript"></script> 
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/ddns.js"></script>
+
+<script type="text/javascript">
+function on_load()
+{	
+	load_form_d3thenable();
+	change_form_d3thenable();
+	load_form_d3thuname();
+	load_form_d3thpasswd();
+	load_form_d3thdomain();
+	load_form_d3thservice();
+	load_form_upmenable();	
+
+	load_form_ourserver();
+	load_form_ourport();
+	load_form_ouruname();
+	load_form_ourpasswd();
+	load_form_ourdomain();	
+	
+	load_form_ourenable();
+	change_form_ourenable();		
+}
+	
+function do_submit()
+{
+	var s = document.getElementById("form_submit");
+	
+	var f;
+	
+	f = document.getElementById("form_d3thenable1");	
+	if (f.checked == true)
+	{
+		if (!check_form_d3thuname())
+			return false;
+		if (!check_form_d3thpasswd())
+			return false;
+		if (!check_form_d3thdomain())
+			return false;
+	}
+
+	s.cururl.value = document.URL;
+	
+	f = document.getElementById("form_ourenable1");
+	if (f.checked == true)
+	{
+		if (!check_form_ourserver())
+			return false;
+		if (!check_form_ouruname())
+			return false;
+		if (!check_form_ourpasswd())
+			return false;
+	}
+	
+	submit_form_d3thenable();
+	submit_form_d3thservice();
+	submit_form_d3thuname();
+	submit_form_d3thpasswd();
+	submit_form_d3thdomain();
+	submit_form_upmenable();
+
+	submit_form_ourenable();
+	submit_form_ourserver();
+	submit_form_ourport();
+	submit_form_ouruname();
+	submit_form_ourpasswd();
+	submit_form_ourdomain();
+	
+	s.action = "cgi-bin/hi3510/param.cgi";
+	s.submit();
+}
+
+</script>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<div id="page">
+<table width="80%" border="0" align="center" cellspacing="6" class="common">
+  <tr>
+    <td width="26%">&nbsp;</td>
+    <td width="74%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><strong class="conspicuous"><script type="text/javascript">document.write(str_netip);</script></strong></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+	<button type="button" onClick="getwebip()">
+	<script type="text/javascript">document.write(str_btn_query);</script>
+	</button>	</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_proddnsset);</script></span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr id="layer5">
+    <td colspan="2">
+	<input type="radio" id="form_ourenable1" name="fddnsradio" onClick="change_form_ourenable()" checked>
+	<script type="text/javascript">document.write(str_on);</script>
+	<input type="radio" id="form_ourenable0" name="fddnsradio" onClick="change_form_ourenable()">
+	<script type="text/javascript">document.write(str_off);</script>	</td>
+    </tr>
+  <tr id="layer6">
+    <td><script type="text/javascript">document.write(str_serveraddr + colon);</script></td>
+    <td><input id="form_ourserver" type="text" maxlength="128" size="22" readonly="true" class="readonlytxt"></td>
+  </tr>
+  <tr id="layer7">
+    <td><script type="text/javascript">document.write(str_serverport + colon);</script></td>
+    <td><input id="form_ourport" type="text" maxlength="128" size="8" readonly="true" class="readonlytxt"></td>
+  </tr>
+  <tr id="layer8">
+    <td><script type="text/javascript">document.write(str_username + colon);</script></td>
+    <td><input id="form_ouruname" type="text" maxlength="128" size="22"></td>
+  </tr>
+  <tr id="layer9">
+    <td><script type="text/javascript">document.write(str_password + colon);</script></td>
+    <td><input id="form_ourpasswd" type="password" maxlength="64" size="22" style="width:166px"></td>
+  </tr>
+  <tr id="layer10" style="display:none">
+    <td><script type="text/javascript">document.write(str_hostname + colon);</script></td>
+    <td><input id="form_ourdomain" type="text" maxlength="128" size="22"></td>
+  </tr>
+  <tr>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_3thdnsset);</script></span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+	<input id="form_d3thenable1" type="radio" name="ddnsradio" onClick="change_form_d3thenable()">
+	<script type="text/javascript">document.write(str_on);</script>
+	<input type="radio" id="form_d3thenable0" name="ddnsradio" onClick="change_form_d3thenable()">
+	<script type="text/javascript">document.write(str_off);</script>
+	</td>
+    </tr>
+  <tr id="layer0">
+    <td><script type="text/javascript">document.write(str_servprov + colon);</script></td>
+    <td>
+	<select id="form_d3thservice" size="1">
+	<option value="0">Dyndns.org </option>
+	<option value="1">3322.org </option>
+	<option value="2">Dynddns.us</option>
+	<option value="3">No-ip.com</option>
+	</select>
+	</td>
+  </tr>
+  <tr id="layer1">
+    <td><script type="text/javascript">document.write(str_username + colon);</script></td>
+    <td><input id="form_d3thuname" type="text" maxlength="128" size="22"></td>
+  </tr>
+  <tr id="layer2">
+    <td><script type="text/javascript">document.write(str_password + colon);</script></td>
+    <td><input id="form_d3thpasswd" type="password" maxlength="64" size="22" style="width:166px"></td>
+  </tr>
+  <tr id="layer3">
+    <td><script type="text/javascript">document.write(str_hostname + colon);</script></td>
+    <td><input id="form_d3thdomain" type="text" maxlength="128" size="22"></td>
+  </tr>
+  <tr>
+    <td><strong class="conspicuous"><script type="text/javascript">document.write(str_autoupnp);</script></strong></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+	<input type="radio" id="form_upmenable1" name="upnpradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_on);</script>
+	<input type="radio" id="form_upmenable0" name="upnpradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_off);</script>
+	</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<br>        
+<table width="25%"  border="0" align="center" cellpadding="0" cellspacing="3">
+	<tr>
+	<td>
+	<button type="button" onClick="do_submit()" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_btn_apply);</script></span></span></button>
+	</td>
+	<td>
+	<button type="button" onClick="JavaScript:location.reload(true)" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_btn_cancel);</script></span></span></button></td>
+	</tr>
+</table>
+
+<form id="form_submit" method="post">	 
+	<input name="cmd" type="hidden" value="setupnpattr">
+	<input name="cururl" type="hidden">
+	<input name="upm_enable" type="hidden">	           
+	<input name="cmd" type="hidden" value="set3thddnsattr">
+	<input name="d3th_enable" type="hidden">
+	<input name="d3th_service" type="hidden">
+	<input name="d3th_uname" type="hidden">
+	<input name="d3th_passwd" type="hidden">
+	<input name="d3th_domain" type="hidden">
+	<input name="cmd" type="hidden" value="setourddnsattr">
+	<input name="our_enable" type="hidden">
+	<input name="our_port" type="hidden">
+	<input name="our_uname" type="hidden">
+	<input name="our_passwd" type="hidden">
+	<input name="our_server" type="hidden">
+	<input name="our_domain" type="hidden">
+</form>
+
+</div>
+</body>
+</html>

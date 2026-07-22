@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<script src="js/language.js" type="text/javascript"></script>
+<script type="text/javascript">
+var language0;
+
+function do_ch()
+{
+setcookie('language0',"0",720);
+window.location.reload();
+}
+
+function do_en()
+{
+setcookie('language0',"1",720);
+window.location.reload();
+}
+
+
+
+var request = null;
+
+function CreateRequest(){  
+	request = null;
+    try {
+      request = new XMLHttpRequest();
+    } catch (trymicrosoft) {
+      try {
+        request = new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (othermicrosoft) {
+        try {
+          request = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (failed) {
+          request = false;
+        }
+      }
+    }
+
+    if (!request)
+        alert("Error initializing XMLHttpRequest!");
+    return request;
+}
+
+function HttpRequest(method, cgistr, cb, async){ 
+    var tempstring = eval("'"+cgistr+"'");
+    request=CreateRequest();
+    if ( request == null) { // Sorry, no Ajax
+        alert("Ajax not available");
+        return null;
+    }
+    request.open(method, tempstring, async); //synchronous
+    if(async)
+    {
+        request.onreadystatechange = function(){  
+            if (request.readyState == 4)
+            {
+               if (request.status == 200){       
+                   response = request.responseText
+                   if(cb) cb();
+               }
+               else if (request.status == 404)
+                   alert("Request URL does not exist");
+            }
+        }
+    }
+    if(method=="POST")
+    {
+        request.send(cgistr);
+    }
+    else
+    {
+        request.setRequestHeader( "If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT" );
+        request.send(null);
+    }
+    if(async) return;
+    if (request.status != 200)
+    {
+        return error;
+    }
+    return request.responseText;
+}
+
+function SendCGICMD(cgistring){  
+    return HttpRequest("GET", cgistring, null, false);
+}
+
+function on_load()
+{
+ var now=new Date(); 
+ 	pcyear=now.getYear();
+    	    if( pcyear < 1000 )
+    	    pcyear += 1900;
+    			if((pcyear < 1971)||(pcyear > 2036))
+    			{
+    				
+    				alert(str_err_pctime);
+    				return false;
+    			}
+    		
+    			pcmonth=now.getMonth()+1;
+    			if(pcmonth<10) pcmonth="0"+pcmonth;
+    			pcday=now.getDate();
+    			if(pcday<10) pcday="0"+pcday;
+    			pchour=now.getHours();
+    			if(pchour<10) pchour="0"+pchour;
+    			pcminute=now.getMinutes();
+    			if(pcminute<10) pcminute="0"+pcminute;
+    			pcsecond=now.getSeconds();
+    			if(pcsecond<10) pcsecond="0"+pcsecond;
+    			var stime=pcyear+'.'+pcmonth+'.'+pcday+'.'+pchour+'.'+pcminute+'.'+pcsecond;
+
+    var string = eval("'cgi-bin/hi3510/param.cgi?cmd=setservertime&-time="+stime+"'");
+    SendCGICMD(string);
+}
+
+</script>
+<title></title>		                                                                
+
+<style type="text/css">
+<!--
+.STYLE2 {font-size: 24px}
+.STYLE3 {font-size: 16px}
+-->
+</style>
+</head>
+
+<body style="text-align:center; background-color: #8CC6FF;" onLoad="on_load()"> 
+<div>
+<p>&nbsp;</p>
+<p align="right">
+	<script type="text/javascript">document.write(str_language);</script>
+	<a href="javascript:do_ch();" >
+		<script type="text/javascript">document.write(str_ch);</script></a>
+	&nbsp;
+		<a href="javascript:do_en();" >
+		<script type="text/javascript">document.write(str_en);</script></a>
+	&nbsp;&nbsp;
+	</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><img src="/web/images/earth0.jpg"><img src="/web/images/logo.jpg"><img src="/web/images/earth1.jpg"></p>
+<p>&nbsp;</p>
+<p><span class="STYLE2">Welcome<script type="text/javascript">document.write(exclamation);</script></span><span class="STYLE3"><script type="text/javascript">document.write(str_welcome);</script></script></span></p>
+</div>
+<table width="20%" border="0" align="center">
+  <tr>
+    <td height="30"><p><a href="/web/index.html"> <script type="text/javascript">document.write(str_pcview);</script></a></p></td>
+  </tr>
+  <tr style="display:none">
+    <td height="30"><p><a href="/web/mobile.html"><script type="text/javascript">document.write(str_mbview);</script></script></a></p></td>
+  </tr>
+  <tr>
+    <td height="30"><p><a href="/web/ClientPlus_Setup.exe"><script type="text/javascript">document.write(str_setupsoft);</script></script></a></p></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+
+
+
+</div>
+</body>
+</html>

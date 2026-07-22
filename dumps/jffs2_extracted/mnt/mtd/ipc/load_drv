@@ -1,0 +1,16 @@
+#!/bin/sh
+
+DRV_PATH="/mnt/mtd/ipc/modules"
+	echo "start watchdog set 60s timeout"
+	/mnt/mtd/ipc/watchdog&
+#if grep "ProdID=7601" /proc/bus/usb/devices > /dev/null
+#then
+	insmod $DRV_PATH/mtutil7601Usta.ko
+	insmod $DRV_PATH/mt7601Usta.ko
+	insmod $DRV_PATH/mtnet7601Usta.ko
+	echo "MT7601" > /mnt/mtd/ipc/tmpfs/wifi.type
+#fi
+
+insmod $DRV_PATH/encript.ko
+insmod $DRV_PATH/gkio.ko
+/mnt/mtd/ipc/reset_sensor.sh

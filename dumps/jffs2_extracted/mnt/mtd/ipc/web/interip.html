@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Internet IP Address</title>
+
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta HTTP-EQUIV="Content-Script-Type" CONTENT="text/javascript">
+<meta NAME="AUTHOR" CONTENT="mike@yoics">
+<meta http-equiv="Pragma" CONTENT="no-cache">
+<meta http-EQUIV="Cache-Control" CONTENT="no-cache">	
+
+<!-- Do a wifi scan -->
+<script language="JavaScript1.2" src="/cgi-bin/param.cgi?cmd=getinterip" type="text/javascript"></script>  
+<script language="JavaScript" type="text/javascript" src="js/language.js"></script>
+
+<script type="text/javascript"> 
+<!--
+function load()
+{
+	if (interip == "")
+		document.write(str_note_noinpublicip);
+	else
+		document.write(str_note_internetipis+colon+interip);
+}
+//-->
+</script>
+
+<link href="css/common.css" rel="stylesheet" type="text/css">
+</head>
+<body onLoad="load();">
+</body>
+</html>

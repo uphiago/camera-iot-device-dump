@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>ipCAM</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT"> 
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getoverlayattr&-region=0&cmd=getoverlayattr&-region=1" type="text/javascript"></script>
+<script src="cgi-bin/hi3510/param.cgi?cmd=getvencattr&-chn=011&cmd=getvencattr&-chn=012" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/osd.js"></script>
+
+<script type="text/javascript">
+
+function on_load()
+{
+
+    load_form_region0();
+	load_form_region1();
+}
+
+function do_submit()
+{
+	var s = document.getElementById("form_submit");
+	
+		if (!check_form_region1)
+		return false;
+	s.cururl.value =document.URL ;
+	
+ 
+	//the time osd 
+	submit_form_region0();
+	//the info osd
+	submit_form_region1();	
+	
+	
+	s.action="cgi-bin/hi3510/param.cgi";
+	s.submit();
+	
+}
+</script>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<div id="page">
+
+<table width="80%" border="0" align="center" cellspacing="5" class="common">
+ <tr>
+    <td width="18%">&nbsp;</td>
+    <td width="80%">&nbsp;</td>
+    </tr>
+<tr>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_osdopt);</script></span></td>
+    <td>　</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_osdtime + colon);</script></td>
+    <td><input type="radio" id="form_region0_on" name="timeradio" value="radiobutton" checked>
+      <script type="text/javascript">document.write(str_on);</script>
+	<input type="radio" id="form_region0_off" name="timeradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_off);</script>	</td>
+  </tr>
+  <tr style="display:none">
+    <td><script type="text/javascript">document.write(str_timeshow + colon);</script></td>
+    <td><input type="radio" id="form_region0_top" name="timeshowradio" value="radiobutton" checked>
+      <script type="text/javascript">document.write(str_roof);</script>
+	<input type="radio" id="form_region0_down" name="timeshowradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_base);</script>	</td>
+  </tr>
+  <tr >
+    <td><script type="text/javascript">document.write(str_osdname + colon);</script></td>
+    <td>
+	<input type="radio" id="form_region1_on" name="nameradio" value="radiobutton" checked >
+	<script type="text/javascript">document.write(str_on);</script>
+	<input type="radio" id="form_region1_off" name="nameradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_off);</script>	</td>
+  </tr>
+  <tr style="display:none">
+    <td><script type="text/javascript">document.write(str_nameshow + colon);</script></td>
+    <td><input type="radio" id="form_region1_top" name="nameshowradio" value="radiobutton" checked>
+      <script type="text/javascript">document.write(str_roof);</script>
+	<input type="radio" id="form_region1_down" name="nameshowradio" value="radiobutton">
+	<script type="text/javascript">document.write(str_base);</script>	</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_osdname + colon);</script></td>
+    <td><input type="text" id="form_region1_name" size="15" maxlength="20"></td>
+  </tr>
+
+  <tr>
+    <td width="18%">&nbsp;</td>
+    <td width="80%">&nbsp;</td>
+    </tr>
+  <tr>
+    <td colspan="2">
+	<table width="25%"  border="0" align="center" cellpadding="0" cellspacing="3">
+		<tr>
+		<td>
+		<button type="button" onClick="do_submit()" class="btn"><span><span>
+		<script type="text/javascript">document.write(str_btn_apply);</script></span></span></button>		</td>
+		<td>
+		<button type="button" onClick="JavaScript:location.reload(true)" class="btn"><span><span>
+		<script type="text/javascript">document.write(str_btn_cancel);</script></span></span></button>		</td>
+		</tr>
+	</table>	</td>
+    </tr>
+  
+</table>
+
+<form method="post" id="form_submit">
+<input name="cmd" type="hidden" value="setoverlayattr">
+<input name="cururl" type="hidden"> 
+<input name="region0" type="hidden">
+<input name="show0" type="hidden">
+<input name="place0" type="hidden">
+<input name="cmd" type="hidden" value="setoverlayattr">
+<input name="region1" type="hidden">
+<input name="show1" type="hidden">
+<input name="name1" type="hidden">
+<input name="place1" type="hidden">
+
+</form>
+
+</div>
+</body>
+</html>

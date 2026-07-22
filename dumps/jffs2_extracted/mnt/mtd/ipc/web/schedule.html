@@ -1,0 +1,2401 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT"> 
+<title>ipCAM</title>
+<script src="cgi-bin/hi3510/param.cgi?cmd=getschedule&-type=event&-ename=md" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/schedule.js"></script>
+<script type="text/javascript">
+
+function on_load()
+{
+var form=document.form1;
+if(etm==0)
+{
+	form.mode_radio[0].checked=true;
+	var i =0;
+	var j =0;
+	var startHour = 0;
+	var startMinute = 0;
+	var endHour = 0;
+	var endMinute = 0;
+	for(i=0;i<7;i++)
+	{
+    if(week[i] != "")
+    {
+		var a=week[i].split(",");
+    if(a.length>0)
+    {
+    	form.daycheck[i+2].checked = true;
+    	for(j=0;j<(a.length -1);j++)
+			{
+				var b=a[j].split("~");
+				if(b.length>1)
+				{
+				startHour = Math.floor((parseInt(b[0]))/4);
+				startMinute = (parseInt(b[0]))%4;
+				
+				endHour = Math.floor((parseInt(b[1])+1)/4);
+				endMinute = (parseInt(b[1])+1)%4;
+			  }
+			else
+				{
+					startHour = Math.floor((parseInt(a[j]))/4);
+				  startMinute = (parseInt(a[j]))%4;
+				
+				  endHour = Math.floor((parseInt(a[j])+1)/4);
+				  endMinute = (parseInt(a[j])+1)%4;
+				}
+				var key = i*3+j+6;
+				form.sun_startHour[key].options[startHour].selected=true;
+				form.sun_startMinute[key].options[startMinute].selected=true;
+				
+				form.sun_endHour[key].options[endHour].selected=true;
+				form.sun_endMinute[key].options[endMinute].selected=true;
+			  
+				do_endHour(key);
+		}
+    }
+  }
+  else
+  	{
+  		form.daycheck[i+2].checked = false;
+  	}
+		
+	}
+}
+else if(etm==1)
+{
+		form.mode_radio[1].checked=true;
+		for(i=0;i<2;i++)
+		{
+     var etemValue ;
+     if(i==0)
+     {
+    	  etemValue = workday;
+     }
+     else
+  	 {
+  		  etemValue = weekend;
+  	 }
+  	 if(etemValue !="")
+  	 {
+		   var a=etemValue.split(",");
+	     if(a.length>0)
+       {
+    	    form.daycheck[i].checked = true;
+       
+       
+		      for(j=0;j<(a.length-1);j++)
+		      {
+			     	var b=a[j].split("~",2);
+			     	if(b.length>1)
+			     	{
+						startHour = Math.floor((parseInt(b[0]))/4);
+						startMinute = (parseInt(b[0]))%4;
+						
+			
+						endHour = Math.floor((parseInt(b[1])+1)/4);
+						endMinute = (parseInt(b[1])+1)%4;
+					}
+				else
+					{
+						startHour = Math.floor((parseInt(a[j]))/4);
+						startMinute = (parseInt(a[j]))%4;
+						endHour = Math.floor((parseInt(a[j])+1)/4);
+						endMinute = (parseInt(a[j])+1)%4;
+					}
+						var key = i*3+j;
+						form.sun_startHour[key].options[startHour].selected=true;
+						form.sun_startMinute[key].options[startMinute].selected=true;
+						form.sun_endHour[key].options[endHour].selected=true;
+						form.sun_endMinute[key].options[endMinute].selected=true;
+						do_endHour(key);
+		  		}
+		 		}
+	 		}
+	 	  else
+  	  {
+  			form.daycheck[i].checked = false;
+  	  }
+	}
+}
+else 
+	{
+		form.mode_radio[2].checked=true;
+	}
+do_filename();
+
+
+
+}
+
+function do_filename()
+{
+	var form=document.form1;
+	var i;
+	if(form.mode_radio[0].checked==true)
+	{
+		for(i=0;i<=1;i++)
+		{
+       document.getElementById('layer'+i).style.visibility="hidden";
+   }
+   for(i=2;i<=9;i++)
+		{
+       document.getElementById('layer'+i).style.visibility="visible";
+   }
+	}
+else if(form.mode_radio[1].checked==true)
+	{
+		for(i=0;i<=1;i++)
+		{
+       document.getElementById('layer'+i).style.visibility="visible";
+   }
+   document.getElementById('layer9').style.visibility="visible";
+   for(i=2;i<=8;i++)
+		{
+       document.getElementById('layer'+i).style.visibility="hidden";
+   }
+	}
+else
+	{
+		for(i=0;i<=9;i++)
+		{
+       document.getElementById('layer'+i).style.visibility="hidden";
+   }
+	}
+}
+function do_endHour(i)
+{
+	var form=document.form1;
+	if(form.sun_endHour[i].options[24].selected == true)
+	{
+		form.sun_endMinute[i].options[0].selected=true;
+		form.sun_endMinute[i].disabled = true;
+	}
+else
+	{
+		form.sun_endMinute[i].disabled = false;
+	}
+	
+}
+
+function do_submit()
+{
+	var form1 = document.form1;
+	var form;
+
+	if(form1.mode_radio[0].checked==true)
+	{
+		form = document.form2;
+		
+		var startTime = 0;
+		var endTime = 0;
+		var i,j,k;
+		
+		for(i=2;i< 9;i++)
+		{
+			var temp;
+		  temp = i-2;
+			document.getElementById("wk"+ temp).value = "";	
+		
+			if(form1.daycheck[i].checked == true)
+			{
+				var weekDay = new Array() ;
+			  weekDay[0] = "";
+			  weekDay[1] = "";
+			  weekDay[2] = "";
+				for(j=0;j<3;j++)
+				{
+					 k = i*3+j;
+					 
+				   startTime = (form1.sun_startHour[k].selectedIndex)*4 + (form1.sun_startMinute[k].selectedIndex);
+				   endTime = (form1.sun_endHour[k].selectedIndex)*4 + (form1.sun_endMinute[k].selectedIndex);
+
+				   
+				   if(startTime > endTime)
+				   {
+				   	  alert(str_err_value);
+					    if(form1.sun_startHour[k].selectedIndex > form1.sun_endHour[k].selectedIndex)
+					    {
+					    	return false;
+					    	
+					    }
+					  else
+					  	{
+					    	return false;
+					  	}
+				     }
+				     
+				      
+				     if(startTime < endTime)
+				     {
+				     		endTime = endTime-1;
+				      	weekDay[j]=startTime + "~"+ endTime;
+				      	
+				     }
+			     
+				    
+			   }
+			   
+			 
+			   for(j=0;j<3;j++)
+			   {
+			   		if(weekDay[j] != "")
+			   		{
+			   			if(document.getElementById("wk"+ temp).value != "")
+			   			{
+			   				document.getElementById("wk"+ temp).value += ",";
+			   			}
+			   			document.getElementById("wk"+ temp).value += weekDay[j];
+			   		}
+			   }
+			}
+			if(document.getElementById("wk"+ temp).value == "")
+			   {
+			   	document.getElementById("wk"+ temp).value = "none";
+			  }
+		}
+		form.week0.name="-week0";
+		form.week1.name="-week1";
+		form.week2.name="-week2";
+		form.week3.name="-week3";
+		form.week4.name="-week4";
+		form.week5.name="-week5";
+		form.week6.name="-week6";
+	}
+else if(form1.mode_radio[1].checked==true)
+	{
+		form = document.form3;
+		
+		var startTime = 0;
+		var endTime = 0;
+		var i,j,k;
+		for(i=0;i<2;i++)
+		{
+			var temp;
+			if(i==0)
+			{
+				temp = "wrkday";
+			}
+		else
+			{
+				temp = "wkend";
+			}
+			document.getElementById(temp).value = "";	
+			if(form1.daycheck[i].checked == true)
+			{
+				var weekDay = new Array() ;
+			  weekDay[0] = "";
+			  weekDay[1] = "";
+			  weekDay[2] = "";
+				for(j=0;j<3;j++)
+				{
+					 k = i*3+j;
+					 
+				   startTime = (form1.sun_startHour[k].selectedIndex)*4 + (form1.sun_startMinute[k].selectedIndex);
+				   endTime = (form1.sun_endHour[k].selectedIndex)*4 + (form1.sun_endMinute[k].selectedIndex);
+
+				   
+				   if(startTime > endTime)
+				   {
+				   	  alert(str_err_value);
+					    if(form1.sun_startHour[k].selectedIndex > form1.sun_endHour[k].selectedIndex)
+					    {
+					    	return false;
+					    	
+					    }
+					  else
+					  	{
+					    	return false;
+					  	}
+				     }
+				     
+				      
+				     if(startTime < endTime)
+				     {
+				     		endTime = endTime-1;
+				      	weekDay[j]=startTime + "~"+ endTime;
+				      	
+				     }
+			     
+				    
+			   }
+			   
+			 
+			   for(j=0;j<3;j++)
+			   {
+			   		if(weekDay[j] != "")
+			   		{
+			   			if(document.getElementById(temp).value != "")
+			   			{
+			   				document.getElementById(temp).value += ",";
+			   			}
+			   			document.getElementById(temp).value += weekDay[j];
+			   		}
+			   }
+			   
+			}
+			if(document.getElementById(temp).value == "")
+			   {
+			   	document.getElementById(temp).value = "none";
+			  }
+		}
+		form.workday.name="-workday";
+		form.weekend.name="-weekend";
+	}
+else
+	{
+		form = document.form4;
+	}
+	  form.cururl.value = document.URL;
+		form.type.name="-type";
+		form.ename.name="-ename";
+		form.etm.name="-etm";
+		form.action="cgi-bin/hi3510/param.cgi";
+		form.submit(); 
+		return true;
+}
+function cleantimes()
+{
+	var form = document.form1;
+	var i;
+	var n;
+	
+	n=0;
+	if(form.mode_radio[0].checked==true)
+	{
+		
+		 for(i=2*3;i<9*3;i++)
+		 {
+		 	  	if ((i%3) == 0)
+		 	  	{
+		 	  		n=i/3;
+		 	  		form.daycheck[n].checked = false;
+		 	  	}
+				form.sun_startHour[i].options[0].selected=true;
+				form.sun_startMinute[i].options[0].selected=true;
+				form.sun_endHour[i].options[0].selected=true;
+				form.sun_endMinute[i].options[0].selected=true;
+		 }
+	}
+	else if(form.mode_radio[1].checked==true)
+	{
+		
+		 for(i=0;i<3*3;i++)
+		 {
+		 	  	if ((i%3) == 0)
+		 	  	{
+		 	  		n=i/3;
+		 	  		form.daycheck[n].checked = false;
+		 	  	}
+				form.sun_startHour[i].options[0].selected=true;
+				form.sun_startMinute[i].options[0].selected=true;
+				form.sun_endHour[i].options[0].selected=true;
+				form.sun_endMinute[i].options[0].selected=true;
+		 }
+	}
+}
+</script>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<table width="750" height="465" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td valign="top"><table width="100%" height="465" border="0" align="right" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="100%" valign="top">
+        	<form name="form1">
+        	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td><table width="100%"  border="0" align="center" cellpadding="0" cellspacing="10" class="common">
+                <tr align="center" class="common">
+                  <td align="left">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td class="style7">&nbsp;</td>
+                </tr>
+                <tr align="center" class="common">
+                  <td align="left"></td>
+                  <td align="left"><input name="mode_radio" value="checkbox" type="radio" onClick="do_filename()">
+					<strong class="conspicuous">
+					<script type="text/javascript">document.write(str_weekmode);</script>
+</strong></td>
+                  <td align="left"><input name="mode_radio" value="checkbox" type="radio" onClick="do_filename()">
+                  	<strong class="conspicuous"><script type="text/javascript">document.write(str_weekendmode);</script></strong></td>
+                  <td align="left" class="style7"><input name="mode_radio" value="checkbox" type="radio" onClick="do_filename()">
+                  	<strong class="conspicuous"><script type="text/javascript">document.write(str_alltimemode);</script></strong></td>		
+                </tr>
+                <tr align="center" class="common" id="layer9">
+                  <td width="12%" nowrap align="left"> <div align="center" class="conspicuous"><script language="JavaScript" type="text/javascript">document.write(str_week);</script></strong></div></td>
+                  <td width="23%"> <div align="center" class="conspicuous"><script language="JavaScript" type="text/javascript">document.write(str_begintime);</script>1~<script type="text/javascript">document.write(str_endtime);</script>1 </div></td>
+                  <td width="30%"> <div align="center" class="conspicuous"><script language="JavaScript" type="text/javascript">document.write(str_begintime);</script>2~<script type="text/javascript">document.write(str_endtime);</script>2 </div></td>
+                  <td class="style7"><div align="center" class="conspicuous"><script language="JavaScript" type="text/javascript">document.write(str_begintime);</script>3~<script type="text/javascript">document.write(str_endtime);</script>3 </div></td>
+                </tr>
+                <tr align="center" id="layer0">
+                  <td align="left"> <div><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_workday);</script></div></td>
+                  <td nowrap><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(0);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td nowrap><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(1);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td nowrap class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(2);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                <tr align="center" id="layer1">
+                  <td align="left"> <div ><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_freeday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(3);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(4);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(5);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                <tr align="center" id="layer2">
+                  <td align="left"> <div ><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_sunday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(6);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(7);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(8);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                <tr align="center" id="layer3">
+                  <td align="left"> <div><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_monday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(9);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(10);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(11);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                <tr align="center" id="layer4">
+                  <td align="left"> <div><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_tuesday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(12);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(13);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(14);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                <tr align="center" id="layer5">
+                  <td align="left"> <div ><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_wednesday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(15);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(16);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(17);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                
+                 <tr align="center" id="layer6">
+                  <td align="left"> <div><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_thursday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(18);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(19);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(20);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                
+                 <tr align="center" id="layer7">
+                  <td align="left"> <div><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_friday);</script></div></td>
+                  <td><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(21);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(22);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(23);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+                 <tr align="center" id="layer8">
+                  <td align="left"> <div ><input name="daycheck" value="checkbox" type="checkbox" ><script language="JavaScript" type="text/javascript">document.write(str_saturday);</script></div></td>
+                  <td align="left"><div align="center">
+                  	
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>
+                    
+                    :
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(24);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute" >
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td align="left"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(25);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                  <td align="left" class="style7"><div align="center">
+                    <select name="sun_startHour">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    </select>:
+                    <select name="sun_startMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>~
+                    <select name="sun_endHour" onChange="do_endHour(26);">
+                    <option>00</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    </select>:
+                    <select name="sun_endMinute">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                    </select>
+                    </select>
+                  </div></td>
+                </tr>
+              </table>
+                <table width="40%"  border="0" align="center" cellpadding="0" cellspacing="3">
+                                                <tr>
+                                                    <td>
+													<button type="button" onClick="do_submit()" class="btn"><span><span><script language="JavaScript" type="text/javascript">document.write(str_btn_apply);</script></span></span></button></td>
+                                                    <td>
+													<button type="button" onClick="JavaScript:location.reload(true)" class="btn"><span><span><script language="JavaScript" type="text/javascript">document.write(str_btn_cancel);</script></span></span></button></td>
+													                                                    <td>
+													<button type="button" onClick="cleantimes()" class="btn"><span><span><script language="JavaScript" type="text/javascript">document.write(str_btn_clear);</script></span></span></button></td>
+
+                                                </tr>
+                </table>           
+                </td>
+          </tr>
+        </table>
+        </form>
+    <form method="post" name="form3">
+	<input name="cmd" type="hidden" value="setschedule">
+	 <input name="cururl" type="hidden"> 
+	 <input name="type" type="hidden" value="event">
+	 <input name="ename" type="hidden" value="md">
+	 <input name="etm" type="hidden" value="1">
+	 <input id="wrkday" name="workday" type="hidden" value="none">
+	 <input id="wkend" name="weekend" type="hidden" value="none">
+</form>
+<form method="post" name="form2">
+	<input name="cmd" type="hidden" value="setschedule">
+	 <input name="cururl" type="hidden"> 
+	 <input name="type" type="hidden" value="event">
+	 <input name="ename" type="hidden" value="md">
+	 <input name="etm" type="hidden" value="0">
+	 <input id=wk0 name="week0" type="hidden" value="none">
+	 <input id=wk1 name="week1" type="hidden" value="none">
+	 <input id=wk2 name="week2" type="hidden" value="none">
+	 <input id=wk3 name="week3" type="hidden" value="none">
+	 <input id=wk4 name="week4" type="hidden" value="none">
+	 <input id=wk5 name="week5" type="hidden" value="none">
+	 <input id=wk6 name="week6" type="hidden" value="none">
+</form>
+ <form method="post" name="form4">
+	<input name="cmd" type="hidden" value="setschedule">
+	 <input name="cururl" type="hidden"> 
+	 <input name="type" type="hidden" value="event">
+	 <input name="ename" type="hidden" value="md">
+	 <input name="etm" type="hidden" value="2">
+</form>
+        </td>
+        <td width="21%" valign="top"><table width="100%" height="465" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="187" align="right" valign="top">
+            	<table width="89%" height="333" border="0" align="right" cellpadding="0" cellspacing="4">
+            		
+                <tr>
+                  
+                </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table>
+    
+    </td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

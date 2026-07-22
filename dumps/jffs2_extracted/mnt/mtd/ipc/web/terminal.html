@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+<title>ipCAM</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getmotorattr&cmd=getlightattr" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/terminal.js"></script>
+
+<script type="text/javascript">
+
+function on_load()
+{
+	load_form_tiltscan();
+	load_form_tiltspeed();
+	load_form_movehome();
+	load_form_ptzalarmmask();
+	load_form_light();
+}
+
+function do_submit()
+{	
+	var s = document.getElementById("form_submit");
+	
+	
+	if (!check_form_tiltscan())
+		return false;
+	
+	s.cururl.value=document.URL;
+	
+	
+	submit_form_tiltscan();
+	submit_form_tiltspeed();
+	submit_form_movehome();
+	submit_form_ptzalarmmask();
+	submit_form_light();
+
+    s.panscan.name = "-panscan";
+	s.tiltscan.name = "-tiltscan";
+	s.panspeed.name  = "-panspeed";	
+	s.tiltspeed.name  = "-tiltspeed";
+	s.movehome.name = "-movehome";
+	s.ptzalarmmask.name = "-ptzalarmmask";
+	s.light_enable.name="-light_enable";	
+	s.action="cgi-bin/hi3510/param.cgi";
+	s.submit();
+}
+</script>
+
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+</head>
+
+<body leftmargin="0" topmargin="0" onLoad="on_load()" marginheight="0" marginwidth="0">
+<div id="page">
+
+<table width="90%" border="0" align="center" class="common">
+  <tr>
+    <td width="25%">&nbsp;</td>
+    <td width="75%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><span class="conspicuous thick"><script type="text/javascript">document.write(str_ptzset);</script></span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(tiltnum + colon);</script></td>
+    <td><input id="form_tiltscan" maxlength="3" size="4" type="text">  &nbsp;&nbsp;<script>document.write(str_tiltscope);</script></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(tilttes + colon);</script></td>
+    <td>
+	<select id="form_tiltspeed">
+	<option value="0"><script type="text/javascript">document.write(str_speed0);</script></option>
+	<option value="1"><script type="text/javascript">document.write(str_speed1);</script> </option>
+	<option value="2"><script type="text/javascript">document.write(str_speed2);</script> </option>
+	</select>	
+	</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(tiltcenter + colon);</script></td>
+    <td>
+	<input type="radio" id="form_movehome1" name="radio1" >
+	  <script type="text/javascript">document.write(str_on);</script>
+	  <input type="radio" id="form_movehome0" name="radio1" >
+	  <script type="text/javascript">document.write(str_off);</script>
+	</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_ptzalarm + colon);</script></td>
+    <td>
+	<input type="radio" id="form_ptzalarmmask1" name="radio2" >
+	  <script type="text/javascript">document.write(str_on);</script>
+	  <input type="radio" id="form_ptzalarmmask0" name="radio2" >
+	  <script type="text/javascript">document.write(str_off);</script>
+	</td>
+  </tr>
+ 
+<tr>
+    <td><script type="text/javascript">document.write(str_lenmodetip + colon);</script></td>
+    <td>
+	<input type="radio" id="form_len1" name="radio3" >
+	  <script type="text/javascript">document.write(str_lenmode1);</script>
+	  <input type="radio" id="form_len0" name="radio3" >
+	  <script type="text/javascript">document.write(str_lenmode2);</script>
+	</td>
+  </tr>
+  
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="3" width="25%">
+	<tbody>
+	<tr>
+	<td>
+	<button type="button" onClick="do_submit()" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_btn_apply);</script></span></span></button>
+	</td>
+	<td>
+	<button type="button" onClick="JavaScript:location.reload(true)" class="btn"><span><span>
+	<script type="text/javascript">document.write(str_btn_cancel);</script></span></span></button>
+	</td>
+	</tr>
+	</tbody>
+</table>
+
+
+ <form id="form_submit" method="post">
+	<input name="cmd" type="hidden" value="setmotorattr">
+	<input name="cururl" type="hidden">
+	<input name="tiltscan" type="hidden">
+	<input name="tiltspeed" type="hidden">
+	<input name="panscan" type="hidden">
+	<input name="panspeed" type="hidden">
+	<input name="movehome" type="hidden">
+	<input name="ptzalarmmask" type="hidden">
+	
+	<input name="cmd" type="hidden" value="setlightattr">  	
+	<input name="light_enable" type="hidden">					
+</form>
+</div>
+</body>
+</html>

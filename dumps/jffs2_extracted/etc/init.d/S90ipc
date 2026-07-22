@@ -1,0 +1,3 @@
+ifconfig lo 127.0.0.1
+ifconfig eth0 172.20.33.192
+/mnt/mtd/ipc/run &

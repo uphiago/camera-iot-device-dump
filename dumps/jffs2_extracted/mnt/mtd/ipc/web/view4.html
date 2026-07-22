@@ -1,0 +1,1096 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>IP Camera, Network Camera and Video Server Reviews, Articles, 
+News, Forums, Discussion - Your IP Network Camera Source</title>
+<meta 
+content="IP camera, Internet camera, network camera and video server reviews, articles, forums and more. Find answers to your questions regarding IP Cameras, Network Cameras and Video Servers." 
+name=description>
+<meta 
+content="ip camera, network camera, internet camera, video server, ip video, video surveillance, network camera review, network camera reviews, network cameras, IP, IP cameras, IP camera review, IP camera reviews, review, reviews, reports, ratings, report, rating, web camera, webcamera, web cameras, webcam, webcams, network, server, wired, wireless, camera server, 802.11, 802.11g, communications, lan, video solutions, video products, surveillance, remote camera, download, downloads, remote monitoring, web promotion, glossary" 
+name=keywords>
+
+<meta content=en http-equiv=Content-Language>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+<meta content=Qhj/Tyxv9GpbE6i7mDjqV3P6Fn9BBLCIH0xRbjs3mbI= name=verify-v1>
+<meta content=oHERczD+AG6PbpMH+D3Dkdsmd5zZWKOmepfHqD0gD4I= name=verify-v1>
+<meta content="MSHTML 6.00.2900.5726" name=GENERATOR>
+
+<script src="js/language.js" type="text/javascript"></script>
+<script src="js/jquery.js" type="text/javascript"></script>
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getvencattr&-chn=11&cmd=getvencattr&-chn=12&cmd=getstreamflag&cmd=getaudioflag&cmd=getdevices" type="text/javascript"></script>
+<script type="text/javascript">
+
+   function x_onclick() 
+{
+     if (document.getElementById("x1").checked) {
+       window.location.assign("view.html");
+		}
+    if (document.getElementById("x4").checked) {
+        window.location.assign("view4.html");
+    }
+    if (document.getElementById("x9").checked) {
+       window.location.assign("view9.html");
+	}
+}
+
+var numctrl;
+ document.cookie="numctrl=0";
+function on_callback_OnLBClick(index)
+{
+    //soundstop();
+	if(index == 0)
+	{document.cookie="numctrl=0";
+	 color();}
+	else if(index == 1)
+	{document.cookie="numctrl=1";
+	 color1();}
+	else if(index == 2)
+	{document.cookie="numctrl=2";
+	 color2();}
+	else 
+	{document.cookie="numctrl=3";
+	 color3();}	
+	 lre();
+}
+
+
+var Currentid,Currentid1,Currentid2,Currentid3=0;	
+function color()
+{
+    Currentid=document.all("tab");
+	Currentid.bgColor="#FF0033";
+	Currentid1=document.all("tab1");
+	Currentid1.bgColor="#8CC6FF";
+	Currentid2=document.all("tab2");
+	Currentid2.bgColor="#8CC6FF";
+	Currentid3=document.all("tab3");
+	Currentid3.bgColor="#8CC6FF";
+	}
+function color1()
+{
+    Currentid=document.all("tab");
+	Currentid.bgColor="#8CC6FF";
+	Currentid1=document.all("tab1");
+	Currentid1.bgColor="#FF0033";
+	Currentid2=document.all("tab2");
+	Currentid2.bgColor="#8CC6FF";
+	Currentid3=document.all("tab3");
+	Currentid3.bgColor="#8CC6FF";
+	}	
+function color2()
+{
+    Currentid=document.all("tab");
+	Currentid.bgColor="#8CC6FF";
+	Currentid1=document.all("tab1");
+	Currentid1.bgColor="#8CC6FF";
+	Currentid2=document.all("tab2");
+	Currentid2.bgColor="#FF0033";
+	Currentid3=document.all("tab3");
+	Currentid3.bgColor="#8CC6FF";
+	}
+function color3()
+{
+    Currentid=document.all("tab");
+	Currentid.bgColor="#8CC6FF";
+	Currentid1=document.all("tab1");
+	Currentid1.bgColor="#8CC6FF";
+	Currentid2=document.all("tab2");
+	Currentid2.bgColor="#8CC6FF";
+	Currentid3=document.all("tab3");
+	Currentid3.bgColor="#FF0033";
+	}
+<!--
+var w;
+var h;
+var rtsp;
+
+var img2345 = new Image();
+
+function update()
+{
+	var imgObj;
+	
+	imgObj = document.getElementById('rimg12');
+	
+	imgObj.src = img2345.src;
+	img2345.src = "/tmpfs/auto.jpg?" + (new Date()).getTime();
+}
+
+function takeError()
+{
+	img2345.src = "/tmpfs/auto.jpg?" + (new Date()).getTime();
+}
+
+function startonload()
+{
+	img2345.src = "/tmpfs/auto.jpg?" + (new Date()).getTime();
+	img2345.onerror=takeError;
+	img2345.onload=update;
+}
+
+function ptzout()
+{
+	MM_swapImgRestore();
+}
+
+function load1()
+{
+var ip=document.location.host;
+var url = "http://"+ip;
+
+          w=parseInt(480);
+		  h=parseInt(270);	
+            DHiMPlayer[0].SetUrl(url,80,11,name2,password2);
+			DHiMPlayer[0].SetWndPos(0, 0, w, h);
+			DHiMPlayer[0].Play();
+			
+			
+			DHiMPlayer[1].SetUrl(d_host[0],d_port[0],11,d_username[0],d_password[0]);
+			DHiMPlayer[1].SetWndPos(0, 0, w, h);
+			DHiMPlayer[1].Play();
+			
+			
+			DHiMPlayer[2].SetUrl(d_host[1],d_port[1],11,d_username[1],d_password[1]);
+			DHiMPlayer[2].SetWndPos(0, 0, w, h);
+			DHiMPlayer[2].Play();
+			
+			
+			DHiMPlayer[3].SetUrl(d_host[2],d_port[2],11,d_username[2],d_password[2]);
+			DHiMPlayer[3].SetWndPos(0, 0, w, h);
+			DHiMPlayer[3].Play();
+}
+
+
+function flush()
+{
+DHiMPlayer.InvalidateWnd();
+MM_swapImage('Image100','','images/botton/capture.jpg',1);
+}
+
+function streamchange()
+{
+     var form=document.form1;
+    if (navigator.appName.indexOf("Microsoft Internet Explorer") != -1)
+  {
+	
+	if (form.streamselect[0].selected==true)
+	{
+		DHiMPlayer.SetStreamNum(11);
+		location.reload();
+	}
+	else
+	if (form.streamselect[1].selected==true)
+	{
+		DHiMPlayer.SetStreamNum(12);
+		location.reload();
+	}	
+	else
+	if (form.streamselect[2].selected==true)
+	{
+		DHiMPlayer.SetStreamNum(11);
+		location.reload();
+	}	
+	}
+	
+	
+	else
+	{
+	
+if (form.streamselect[0].selected==true)
+{
+	setcookie('streamselect',"0",720);
+	location.reload();
+	
+}
+else if(form.streamselect[1].selected==true)
+{
+	setcookie('streamselect',"1",720);
+	location.reload();
+	
+}
+else
+{
+	setcookie('streamselect',"2",720);
+	location.reload();	
+}
+}
+}
+
+
+function snap(index)
+{
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].Snapshot();
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].Snapshot();
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].Snapshot();
+  }
+   else if(numctrl==3)
+  {DHiMPlayer[3].Snapshot();
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+  
+function record(index)
+{
+var ocxobj;
+	ocxobj = DHiMPlayer[index];
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].Record(0);
+   var flag=DHiMPlayer[0].GetRecordState();
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].Record(0);
+  var flag=DHiMPlayer[1].GetRecordState();
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].Record(0);
+  var flag=DHiMPlayer[2].GetRecordState();
+  }
+    else if(numctrl==3)
+  {DHiMPlayer[3].Record(0);
+  var flag=DHiMPlayer[3].GetRecordState();
+  }
+  else
+  {
+  alert(str_err_hostnum);
+  }
+
+  
+   lrestatus();
+  
+}
+
+
+function lre()  //录像状态
+{
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}  
+  if(numctrl==0)
+  {
+   var flag=DHiMPlayer[0].GetRecordState();
+   }
+  else if(numctrl==1)
+  {
+  var flag=DHiMPlayer[1].GetRecordState();
+  }
+   else if(numctrl==2)
+  {
+  var flag=DHiMPlayer[2].GetRecordState();
+  }
+    else if(numctrl==3)
+  {
+  var flag=DHiMPlayer[3].GetRecordState();
+  }
+  else
+  {
+  alert(str_err_hostnum);
+  }
+
+	lrestatus();
+  
+  
+}
+
+function lrestatus()
+{
+ var flag1=DHiMPlayer[0].GetRecordState();
+ if(flag1==0)
+ {
+ Currentid=document.all("f_1");
+	Currentid.bgColor="#FF0033"
+ }
+ else
+ {
+  Currentid=document.all("f_1");
+	Currentid.bgColor="#8CC6FF"
+ }
+  var flag2=DHiMPlayer[1].GetRecordState();
+ if(flag2==0)
+ {
+ Currentid=document.all("f_2");
+	Currentid.bgColor="#FF0033"
+ }
+ else
+ {
+  Currentid=document.all("f_2");
+	Currentid.bgColor="#8CC6FF"
+ }
+  var flag3=DHiMPlayer[2].GetRecordState();
+ if(flag3==0)
+ {
+ Currentid=document.all("f_3");
+	Currentid.bgColor="#FF0033"
+ }
+ else
+ {
+  Currentid=document.all("f_3");
+	Currentid.bgColor="#8CC6FF"
+ }
+  var flag4=DHiMPlayer[3].GetRecordState();
+ if(flag4==0)
+ {
+ Currentid=document.all("f_4");
+	Currentid.bgColor="#FF0033"
+ }
+ else
+ {
+  Currentid=document.all("f_4");
+	Currentid.bgColor="#8CC6FF"
+ }
+}
+
+function ptzcmdSubmit_down(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(2,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(2,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(2,speed1);
+  }
+   else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(2,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+
+function ptzcmdSubmit_left(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(3,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(3,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(3,speed1);
+  }
+   else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(3,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+
+function ptzcmdSubmit_right(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(4,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(4,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(4,speed1);
+  }
+    else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(4,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+  
+function ptzcmdSubmit_ud(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(24,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(24,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(24,speed1);
+  }
+     else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(24,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  } 
+  }
+  
+ function ptzcmdSubmit_lr(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(25,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(25,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(25,speed1);
+  }
+     else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(25,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+  
+function ptzcmdSubmit_center(index)
+{   var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(23,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(23,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(23,speed1);
+  }
+     else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(23,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+}
+
+function ptzcmdSubmit_zoomin(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(5,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(5,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(5,speed1);
+  }
+     else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(5,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  }
+ function ptzcmdSubmit_zoomout(index)
+{
+var speed1 =31;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+  if(numctrl==0)
+  {
+   DHiMPlayer[0].PtzControl(6,speed1);
+   }
+  else if(numctrl==1)
+  {DHiMPlayer[1].PtzControl(6,speed1);
+  }
+   else if(numctrl==2)
+  {DHiMPlayer[2].PtzControl(6,speed1);
+  }
+     else if(numctrl==3)
+  {DHiMPlayer[3].PtzControl(6,speed1);
+  }
+    else
+  {
+  alert(str_err_hostnum);
+  }
+  } 
+
+function ptzcmdSubmit_stop(index)
+{
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+if(numctrl==0)
+{DHiMPlayer[0].PtzControl(0,0);}
+else if(numctrl==1)  
+{DHiMPlayer[1].PtzControl(0,0);}
+else if(numctrl==2)
+{DHiMPlayer[2].PtzControl(0,0);}
+else
+{DHiMPlayer[3].PtzControl(0,0);}
+}
+
+function set_preset(index)
+{
+var presetset1 = document.getElementById('preset0').value;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+if(numctrl==0)
+{DHiMPlayer[0].PTZPreset(1,presetset1);}
+else if(numctrl==1)  
+{DHiMPlayer[1].PTZPreset(1,presetset1);}
+else if(numctrl==2)  
+{DHiMPlayer[2].PTZPreset(1,presetset1);}
+else if(numctrl==3)
+{DHiMPlayer[3].PTZPreset(1,presetset1);}
+
+    else
+  {
+  alert(str_err_hostnum);
+  }
+}
+
+function go_preset(index)
+{
+var presetset = document.getElementById('preset0').value;
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+if(numctrl==0)
+{DHiMPlayer[0].PTZPreset(0,presetset);}
+else if(numctrl==1)  
+{DHiMPlayer[1].PTZPreset(0,presetset);}
+else if(numctrl==2)  
+{DHiMPlayer[2].PTZPreset(0,presetset);}
+else  if(numctrl==3)
+{DHiMPlayer[3].PTZPreset(0,presetset);}
+
+    else
+  {
+  alert(str_err_hostnum);
+  }
+}	
+
+
+function sd()
+{
+var strcookie=document.cookie;
+var arrcookie=strcookie.split("; ");
+var numctrl;
+for(var i=0;i<arrcookie.length;i++){
+      var arr=arrcookie[i].split("=");
+      if("numctrl"==arr[0]){
+             numctrl=arr[1];
+             break;
+      }
+}
+  
+var url = "/sd";  
+var url1 = "http://"+d_host[0]+":"+d_port[0]+"/sd";  
+var url2 = "http://"+d_host[1]+":"+d_port[1]+"/sd";  
+var url3 = "http://"+d_host[2]+":"+d_port[2]+"/sd"; 
+if(numctrl==0)
+{window.open(url,'_blank');}
+else if(numctrl==1)  
+{
+if (d_host[0]=='')
+alert(str_err_selected);
+else
+window.open(url1,'_blank');}
+
+else if(numctrl==2)  
+{if (d_host[1]=='')
+alert(str_err_selected);
+else
+window.open(url2,'_blank');}
+
+else  if(numctrl==3)
+{
+if (d_host[2]=='')
+alert(str_err_selected);
+else
+window.open(url3,'_blank');}
+
+    else
+  {
+  alert(str_err_hostnum);
+  }
+
+}
+
+function playback()
+{ 
+//var url = "/web/backplay.html";  
+//window.open(url,'_blank');
+
+window.open('backplay_g.html','playback','height=600,width=1000,top=100,left=100,toolbar=no,menubar=no,scrollbars=yes,location=no,status=no');
+}
+
+
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+//-->
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+
+<link href="css/button2.css" rel="stylesheet" type="text/css">
+<link href="css/ipcam.css" rel="stylesheet" type="text/css">
+<link href="css/ncr.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+#Layer1 {
+	position:absolute;
+	width:69px;
+	height:21px;
+	z-index:1;
+	left: 79px;
+	top: 189px;
+}
+#Layer2 {
+	position:absolute;
+	width:59px;
+	height:22px;
+	z-index:2;
+}
+.STYLE2 {font-size: 15px;color: #8CC6FF;}
+.STYLE4 {font-size: 10px;color: #000000;}
+.STYLE9 {font-size: 1px; color: #8CC6FF; }
+-->
+</style>
+
+<SCRIPT LANGUAGE=javascript FOR="DHiMPlayer" EVENT="OnLBClick(ntype,cx,cy)"> 
+on_callback_OnLBClick(this.name)
+</script>
+</head>
+<body onLoad="load1()" style="background-color:#8CC6FF" >
+
+<table width="100%" height="100%" border="0" cellspacing="0" id="ipcam_wrapper">
+  <tr bordercolor="#8CC6FF">
+    <td height="75" colspan="2" valign="top">
+	<table width="100%" cellspacing="0">
+	<td width="76%" ><div align="left">&nbsp;
+	<img src="images/earth0.jpg"><img src="images/logo.jpg"><img src="images/earth1.jpg"></div></td>
+	<td width="24%" align="right" style="display:none" >
+	<script type="text/javascript">document.write(str_language+ colon);</script>
+	<a href="javascript:do_ch();" >
+		<script type="text/javascript">document.write(str_ch);</script></a>
+	&nbsp;
+		<a href="javascript:do_en();" >
+		<script type="text/javascript">document.write(str_en);</script></a>
+&nbsp;&nbsp;	</td>
+	
+	</table>	</td>
+  </tr>
+  <tr bordercolor="#0066FF">
+    <td width="198" valign="top" style="margin:0; padding: 0; border: 0;">
+	
+		<div id="ipcam_menu">
+				  
+			<div id="ipcam_menu1" style="padding:1">
+				<ul id="left_tabs">
+					<li class="left_focus" id="left_monitoring">
+					<span><script type="text/javascript">document.write(str_rtview);</script></span></li>
+					<li id="left_settings" style="display:none">
+					<span><a href="config.html" style="color:#FFFFFF; text-decoration: none; font-size: 100%;">
+					<script type="text/javascript">document.write(str_config);</script></a></span></li>
+				</ul>
+			</div>
+			
+			<div id="ipcam_size">
+			<br>
+			  <div id="menu">
+				<table  border="0" align="center" cellpadding="0" cellspacing="0">
+     <tr>
+    <td><input type="radio" id="x1" name="x" language="javascript" onClick="return x_onclick()"></td>
+    <td><table width="45" height="45" border="1" cellpadding="0" cellspacing="0" bordercolor="#5A96BA">
+          
+             <td align="center" id="y_1"><span class="STYLE2">1</span></td>
+           
+         </table></td>
+    <td><input type="radio" id="x4" name="x" language="javascript" onClick="return x_onclick()" checked="checked"></td>
+    <td><table width="45" height="45" border="1" cellpadding="0" cellspacing="0" bordercolor="#5A96BA">           
+      <tr>
+             <td width="50%" height="50%" align="center" id="f_1"><span class="STYLE4">1</span></td>
+             <td width="50%" height="50%" align="center" id="f_2"><span class="STYLE4">2</span></td>
+           </tr>
+           <tr>
+             <td width="50%" height="50%" align="center" id="f_3"><span class="STYLE4">3</span></td>
+             <td width="50%" height="50%" align="center" id="f_4"><span class="STYLE4">4</span></td>
+           </tr>
+
+         </table></td>
+    <td><input type="radio" id="x9" name="x" language="javascript" onClick="return x_onclick()"></td>
+    <td><table width="45" height="45" border="1" cellpadding="0" cellspacing="0" bordercolor="#5A96BA">
+           <tr>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">1</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">2</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">3</span></td>
+           </tr>
+           <tr>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">4</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">5</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">6</span></td>
+           </tr>
+           <tr>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">7</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">8</span></td>
+             <td width="33.3%" height="33.3%"><span class="STYLE9">9</span></td>
+           </tr>
+         </table></td>
+  </tr>
+</table>
+				</div>
+				
+				<form name="form1" id="form_ss">
+				<table width="200" border="0" align="center">
+				  <tr style="display:none">
+					<td align="right" >
+					<span class="STYLE1">
+				<script type="text/javascript">document.write(str_view + colon);</script></span>
+				</td>
+					<td >
+				<select name="streamselect" id="form_streamselect" onChange="streamchange()">
+				<option value="0"><script type="text/javascript">document.write(str_1ststream);</script></option>
+				<option value="1"><script type="text/javascript">document.write(str_2ndstream);</script></option>
+				<option value="2"><script type="text/javascript">document.write(str_3thstream);</script></option>
+				</select>					</td>
+				  </tr>
+				</table>
+				</form>
+				
+				<br>
+		    </div>
+			
+			<div id="ipcam_menu2">
+	
+				<div id="ipcam_sdcard" class="ipcam_menu_item"><img src="images/botton/sd.jpg" onClick="sd()" id="card" alt="SD卡" name="card" width="128" height="32" border="0"></div>
+	
+				<div id="ipcam_capture" class="ipcam_menu_item"><img src="images/botton/capture.jpg" onClick="snap()" id="capture" alt="抓拍" name="capture" width="128" height="32" border="0"></div>
+	
+				<div id="ipcam_record" class="ipcam_menu_item"><img src="images/botton/record.jpg" onClick="record()" id="videorec" alt="录像" name="videorec" width="128" height="32" border="0"> </div>
+				
+				<div id="ipcam_playback" class="ipcam_menu_item"><img src="images/botton/Playback.jpg" onClick="playback()" id="videoplay" alt="回放" name="videoplay" width="128" height="32" border="0"></div>
+			</div>
+			
+			<div id="ipcam_ptz" style="display:none">
+				<div id="ipcam_ptz_dir">
+					<table width="auto" border="0" align="center" cellspacing="0">
+					<tr>
+					<td>　</td>
+					<td><a  onmouseout="ptzout()" onMouseOver="MM_swapImage('Image20','','images/fx2a.gif',1)" onMouseDown="ptzcmdSubmit_up()" onMouseUp="ptzcmdSubmit_stop()"> <img src="images/fx2.gif" name="Image20" border="0" height="38" width="38" id=up alt="上"></a></td>
+					<td>　</td>
+					</tr>
+					<tr>
+					<td><a onMouseOut="ptzout()" onMouseDown="ptzcmdSubmit_left()" onMouseUp="ptzcmdSubmit_stop()" onMouseOver="MM_swapImage('Image22','','images/fx4a.gif',1)"> <img src="images/fx4.gif" name="Image22" border="0" height="38" width="38" id="left" alt="左"></a></td>
+					<td><a onMouseOut="ptzout()" onMouseDown="ptzcmdSubmit_home()" onMouseUp="ptzcmdSubmit_stop()" onMouseOver="MM_swapImage('Image23','','images/fx5a.gif',1)"> <img src="images/fx5.gif" name="Image23" border="0" height="38" width="38" id="center" alt="居中"></a>　</td>
+					<td><a onMouseOut="ptzout()" onMouseDown="ptzcmdSubmit_right()" onMouseUp="ptzcmdSubmit_stop()" onMouseOver="MM_swapImage('Image24','','images/fx6a.gif',1)"> <img src="images/fx6.gif" name="Image24" border="0" height="38" width="38" id="right" alt="右"></a></td>
+					</tr>
+					<tr>
+					<td>　</td>
+					<td><a onMouseOut="ptzout()" onMouseDown="ptzcmdSubmit_down()" onMouseUp="ptzcmdSubmit_stop()" onMouseOver="MM_swapImage('Image26','','images/fx8a.gif',1)"> <img src="images/fx8.gif" name="Image26" border="0" height="38" width="38" id="down" alt="下"></a></td>
+					<td>　</td>
+					</tr>
+				  </table>		
+				</div>
+					  
+				<div id="other">
+				
+					<div id="zoom">
+						<table width="50%" border="0" align="center">
+						<tr>
+						<td>
+							<a onMouseDown="ptzcmdSubmit('zoomin')" onMouseUp="ptzcmdSubmit('stop')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('zoomin','','images/zoomin-Over.jpg',1)"><img src="images/zoomin.jpg" alt="" name="zoomin" width="75" height="27" border="0"></a>						</td>
+						<td>
+							<a onMouseDown="ptzcmdSubmit('zoomout')" onMouseUp="ptzcmdSubmit('stop')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('zoomout','','images/zoomout-Over.jpg',1)"><img src="images/zoomout.jpg" alt="Զ" name="zoomout" width="75" height="27" border="0"></a>						</td>
+						</tr>
+						</table>			
+					</div>
+					
+					<div id="pos">			
+						<table width="50%" border="0" align="center">
+						<tr>
+						<td>
+							<a onClick="ptzsetpresetSubmit('1')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('posset','','images/posset-Over.jpg',1)"><img src="images/posset.jpg" alt="" name="posset" width="75" height="27" border="0"></a>						</td>
+						<td>
+						  <a onClick="ptzctrlpresetSubmit('1')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('poscall','','images/poscall-Over.jpg',1)"><img src="images/poscall.jpg" alt="" name="poscall" width="75" height="27" border="0"></a>						</td>
+						</tr>
+						</table>
+					</div>	
+				</div>	  
+			</div>
+			
+			<SCRIPT>
+  			document.getElementById('card').alt=str_sd;
+			document.getElementById('capture').alt=str_snap;
+			document.getElementById('videorec').alt=str_record;
+			document.getElementById('videoplay').alt=str_playback;
+			if (language=='1')
+{
+            document.getElementById('card').src="images/botton/sd_en.jpg";
+			document.getElementById('capture').src="images/botton/capture_en.jpg";
+			document.getElementById('videorec').src="images/botton/record_en.jpg";
+			document.getElementById('videoplay').src="images/botton/Playback_en.jpg";
+
+}
+else
+{
+            document.getElementById('card').src="images/botton/sd.jpg";
+			document.getElementById('capture').src="images/botton/capture.jpg";
+			document.getElementById('videorec').src="images/botton/record.jpg";
+			document.getElementById('videoplay').src="images/botton/Playback.jpg";
+
+}
+
+</script>	
+		
+			<div id="ipcam_rate" style="display:none">
+				<table align="center" border="0" cellpadding="0" cellspacing="4" height="40" width="auto">
+				<tbody>
+				<tr>
+				<td colspan="1"><p align="right" class="STYLE1"><font color="">
+				<script type="text/javascript">document.write(str_preset + colon);</script></font></td>
+				<td colspan="1"><p align="left">
+				<SELECT id="preset0">
+				<OPTION value="0">1</OPTION>
+				<OPTION value="1">2</OPTION>
+				<OPTION value="2">3</OPTION>
+				<OPTION value="3">4</OPTION>
+				<OPTION value="4">5</OPTION>
+				<OPTION value="5">6</OPTION>
+				<OPTION value="6">7</OPTION>
+				<OPTION value="7">8</OPTION>
+				</SELECT>
+				</td>
+				</tr>
+				</tbody>
+				</table>		
+			</div>
+	</div>	</td>
+    <td width="auto" align="center" valign="top">
+		<div id="ipcam_display">
+			<table border="0" cellspacing="0" bgcolor="#8CC6FF" width="900" height="500">
+  <tr >
+    <td align="center" valign="middle" bgColor="#FF0033"  id="tab"><span>
+      <object style="TOP: 0px; LEFT: 0px" id="DHiMPlayer" name=0
+            classid="clsid:42B182F9-3F08-484E-9913-07193A5D36A5" codebase="WebClientPlus.ocx#version=3,0,5,1" width=480 
+            height=270 viewastext>
+        <param name="_Version" value="65536">
+        <param name="_ExtentX" value="8467">
+        <param name="_ExtentY" value="6350">
+        <param name="_StockProps" value="0">
+      </object>
+    </span></td>
+    <td align="center" valign="middle" id="tab1"><span>
+      <object style="TOP: 0px; LEFT: 0px" id="DHiMPlayer"  name=1
+            classid="clsid:42B182F9-3F08-484E-9913-07193A5D36A5" codebase="WebClientPlus.ocx#version=3,0,5,1" width=480 
+            height=270 viewastext>
+        <param name="_Version" value="65536">
+        <param name="_ExtentX" value="8467">
+        <param name="_ExtentY" value="6350">
+        <param name="_StockProps" value="0">
+      </object>
+    </span></td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"  id="tab2"><span >
+      <object style="TOP: 0px; LEFT: 0px" id="DHiMPlayer" name=2
+            classid="clsid:42B182F9-3F08-484E-9913-07193A5D36A5" codebase="WebClientPlus.ocx#version=3,0,5,1" width=480 
+            height=270 viewastext>
+        <param name="_Version" value="65536">
+        <param name="_ExtentX" value="8467">
+        <param name="_ExtentY" value="6350">
+        <param name="_StockProps" value="0">
+      </object>
+    </span></td>
+    <td  align="center" valign="middle" id="tab3"><span>
+      <object style="TOP: 0px; LEFT: 0px" id="DHiMPlayer" name=3
+            classid="clsid:42B182F9-3F08-484E-9913-07193A5D36A5" codebase="WebClientPlus.ocx#version=3,0,5,1" width=480 
+            height=270 viewastext>
+        <param name="_Version" value="65536">
+        <param name="_ExtentX" value="8467">
+        <param name="_ExtentY" value="6350">
+        <param name="_StockProps" value="0">
+      </object>
+    </span></td>
+  </tr>
+</table>
+	</div>	</td>
+  </tr>
+</table>
+
+</body>
+</html>

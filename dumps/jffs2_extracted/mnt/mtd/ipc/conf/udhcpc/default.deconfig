@@ -1,0 +1,17 @@
+#!/bin/sh
+# Sample udhcpc deconfig script
+
+DEFAULT_IP=192.168.1.88
+DEFAULT_MASK=255.255.255.0
+DEFAULT_GW=192.168.1.1
+BROADCAST="broadcast 192.255.255.255"
+
+echo "dhcp failed. set $interface to default ip: $DEFAULT_IP"
+
+killall arping
+killall runarp
+
+/sbin/ifconfig $interface $DEFAULT_IP $BROADCAST netmask $DEFAULT_MASK
+/sbin/route add default gw $DEFAULT_GW
+
+/mnt/mtd/ipc/runarp $interface & > /dev/null

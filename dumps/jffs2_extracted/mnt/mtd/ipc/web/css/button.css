@@ -1,0 +1,123 @@
+﻿    /* Start custom button CSS here
+    ---------------------------------------- */
+    .btn {
+	display:inline-block;
+	background:none;
+	margin:0;
+	padding:3px 0;
+	border-width:0;
+	overflow:visible;
+	text-decoration:none;
+	color:#333;
+	font-family: Arial, Sans-serif;
+	font-size: 100%;
+	line-height: 1.2;
+	font-weight: bold;
+      }
+    * html button.btn {
+      padding-bottom:1px;
+      }
+    /* Immediately below is a temporary hack to serve the 
+       following margin values only to Gecko browsers
+       Gecko browsers add an extra 3px of left/right 
+       padding to button elements which can't be overriden.
+       Thus, we use -3px of left/right margin to overcome this. */
+    html:not([lang*=""]) button.btn {
+      margin:0 -3px;
+      }
+    .btn span {
+      background:#ddd url(../images/bg-button.gif) repeat-x 0 0;
+      margin:0;
+      padding:3px 0;
+      border-left:1px solid #bbb;
+      border-right:1px solid #aaa;
+      }
+    * html .btn span {
+      padding-top:0;
+      }
+    .btn span span {
+      position:relative;
+      padding:3px .4em;
+      border-width:0;
+      border-top:1px solid #bbb;
+      border-bottom:1px solid #aaa;
+      }
+    
+    /* pill classes only needed if using pill style buttons ( LEFT | CENTER | RIGHT ) */
+    button.pill-l span {
+      border-right-width:0;
+      }
+    button.pill-l span span {
+      border-right:1px solid #bbb;
+      }
+    button.pill-c span {
+      border-right-style:none;
+      border-left-color:#fff;
+      }
+    button.pill-c span span {
+      border-right:1px solid #bbb;
+      }
+    button.pill-r span {
+      border-left-color:#fff;
+      }
+    
+    /* only needed if implementing separate hover/focus/active state for buttons */
+    .btn:hover span, .btn:hover span span, .btn:focus span, .btn:focus span span {
+      cursor:pointer; /* important for any clickable/pressable element */
+      border-color:#9cf !important;
+      color:#000;
+      }
+    .btn:active span {
+      background-position:0 -400px;
+      outline:none;
+      }
+    .btn:focus, .btn:active {
+      outline:none; /* doesn't seem to be respected for <button>, only <a> */
+      }
+
+    /* use if one button should be the 'primary' button */
+    .primary {
+      font-weight:bold;
+      color:#000;
+      }
+	  
+	  
+
+.btn_2k3 {
+	height:auto;
+	BORDER-RIGHT: #002D96 1px solid;
+	PADDING-RIGHT: 2px;
+	BORDER-TOP:
+#002D96 1px solid;
+	PADDING-LEFT: 2px;
+	FONT-SIZE: 18px;
+FILTER:
+progid:DXImageTransform.Microsoft.Gradient(GradientType=0,
+StartColorStr=#FFFFFF, EndColorStr=#9DBCEA); 				BORDER-LEFT: #002D96
+1px solid;
+	CURSOR: hand;
+	COLOR: black;
+	PADDING-TOP: 2px;
+	BORDER-BOTTOM: #002D96 1px solid;
+	text-decoration: none;
+	width: 60px;
+	text-align: center;
+	vertical-align: top;
+}
+
+
+a.button{
+  display:inline-block;
+  width:80px; 
+  height:20px;
+  padding:5px;
+  border:1px #D7D7D7 solid;
+  text-align:center;
+  text-decoration:none;
+  color:#666666;
+  background:url(button_bg.png) repeat-x;
+}
+a.button:hover{
+  background:url(button_bg_hover.png) repeat-x;
+  text-decoration:none;
+}

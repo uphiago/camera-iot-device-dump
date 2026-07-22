@@ -1,0 +1,5 @@
+ls -la /proc/kcore 2>&1; cat /proc/kcore > /tmp/kcore.dump 2>&1 && echo OK || 
+echo FAIL
+ls: /proc/kcore: No such file or directory
+FAIL
+# 

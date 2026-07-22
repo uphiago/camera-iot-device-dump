@@ -1,0 +1,19 @@
+#! /bin/sh
+
+ETH=$1
+
+arpprocess()
+{
+    ALL=`ifconfig $ETH | grep "inet addr:"`
+    IPADDR=`echo $ALL | awk -F " " '{print $2}' | awk -F ":" '{print $2}'`
+    BCAST=`echo $ALL | awk -F " " '{print $3}' | awk -F ":" '{print $2}'`
+#    echo "arping -U -s $IPADDR -I $ETH -c 3 $BCAST"
+    arping -U -s $IPADDR -I $ETH -c 5 $BCAST > /dev/null
+}
+sleep 1
+killall arping
+for i in $(seq 10)
+do
+	arpprocess
+    sleep 5       
+done

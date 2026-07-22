@@ -1,0 +1,32 @@
+#! /bin/sh
+sensor_type=0
+FILE_PATH="/mnt/mtd/ipc/tmpfs/sensor.conf"
+/mnt/mtd/ipc/chksensor 
+sensor_type=`grep sensor $FILE_PATH | awk -F "=" '{print $2}'`
+echo "get sensor_type= $sensor_type"
+
+if [ $sensor_type = "15" ]
+then
+echo "sc1145"
+cd /mnt/mtd/ipc/modules
+/mnt/mtd/ipc/modules/load_g7101 --sc1145
+exit 0 
+fi 
+
+if [ $sensor_type = "5" ]
+then
+echo "gc1024"
+cd /mnt/mtd/ipc/modules
+/mnt/mtd/ipc/modules/load_g7101 --gc1024
+exit 0 
+fi
+
+if [ $sensor_type = "1" ]
+then
+echo "ar0130"
+cd /mnt/mtd/ipc/modules
+/mnt/mtd/ipc/modules/load_g7101 --ar0130
+exit 0 
+fi
+
+echo "waring check sensor error!!!!!!!!!"

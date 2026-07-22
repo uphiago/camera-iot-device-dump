@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Start mdev....
+#
+
+mkdir /dev/pts
+mount -t devpts devpts /dev/pts
+
+case "$1" in
+  start)
+	echo "Starting mdev..."
+	/sbin/mdev -s
+	;;
+  stop)
+	;;
+  restart|reload)
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?

@@ -1,0 +1,518 @@
+================================================================================
+HIPCAM IP CAMERA — DEEP OFFLINE ARTIFACT ANALYSIS
+================================================================================
+Date: July 22, 2026
+Target: Hipcam IP Camera (Goke GK7102 SoC)
+All artifacts from /home/hiago/repositories/homelab/camera/dumps/
+
+
+================================================================================
+1. DEVICE IDENTIFICATION
+================================================================================
+
+Platform:     Goke GK7102 SoC (ARMv5)
+Kernel:       Linux 3.4.43-gk, built 2017-04-17
+              Build host: root@localhost.localdomain
+              Toolchain: gcc 4.6.1 (crosstool-NG 1.18.0)
+Bootloader:   U-Boot 2012.10 (Apr 17 2017 - 15:53:52)
+              Board: GK7102 rb sc1045 v2.00 (GOKE)
+Hostname:     gk7101
+MAC Address:  3C:97:0E:22:E1:14 (ethernet)
+Root FS:      UBIFS on UBI (rootfstype=ubifs root=ubi0:rootfs)
+Memory:       46MB (mem=46M)
+Flash:        SPI NAND (multiple brands supported)
+              - EN25Q128, EN25Q64, GD25Q128C, GD25Q64C
+              - GD5F1GQ4UAYIG, GD5F2GQ4UAYIG
+              - W25Q128FV, W25Q256FV, XM25QH128, etc.
+              sfboot loads from offset 0x50000 (kernel partition)
+
+System date set at boot: 2017.08.29-04:10:11 (hardcoded!)
+
+
+================================================================================
+2. HARDCODED CREDENTIALS
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/config_default.zip/mnt/mtd/ipc/conf/config_user.ini
+
+    [user0]  username=admin     password=admin     authtype=15  (full access)
+    [user1]  username=user      password=user      authtype=3   (limited)
+    [user2]  username=guest     password=guest     authtype=1   (view only)
+    [user3-9] username=(empty)  password=(empty)
+
+*** SECURITY IMPACT: These are factory default credentials for the web
+    interface and RTSP. They are well-known and widely published.
+
+
+================================================================================
+3. TELNET BACKDOOR — UNCONDITIONAL
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/run (line at bottom)
+
+    telnetd -l /bin/sh &
+
+This runs UNCONDITIONALLY at every boot. There is no password on the telnet
+shell! The telnetd daemon provides a root shell to anyone who can reach the
+device on port 23.
+
+Note: A separate debug config option also exists (config_debug.ini):
+    [telnet] tenable="0"
+
+But the `run` script overrides this by launching telnetd directly regardless
+of the config file setting. The debug config merely provides a toggleable
+second instance.
+
+*** SECURITY IMPACT: CRITICAL — root shell without authentication on port 23
+    if the device is network-accessible. This is the PRIMARY entry vector
+    for the Mirai-based botnet that infected this camera.
+
+
+================================================================================
+4. P2P PROTOCOL — ENCRYPTED SERVER ADDRESS
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/conf/config_platform.ini
+
+    [xquncfg]
+    xqunenable                     = "1"
+    xqunmode                       = "1"
+    xqunuuid                       = "IIII-142493-FBBBC"
+    xqunpuship                     = "47.91.149.233"
+    xqunsvraddr = "EKPNAUENAOIFSWSQLPAXPALNAYPGLXHXSUEGLKSZICHUPETAEEEHELHZIHLQPJAOPKEPSQIALUPALOHYLTEREKIDLKIEEOHUEIEJEEEMEN-$$"
+
+The P2P protocol library is libxqun.so (XiongMai/Q-series Unet protocol).
+Key facts:
+    - P2P mode is ENABLED by default (xqunenable=1)
+    - Push IP: 47.91.149.233 (Alibaba Cloud, Hangzhou)
+    - Server address field is obfuscated (106 chars, A-Z only, `-$$` suffix)
+    - UUID: IIII-142493-FBBBC (the camera's unique P2P ID)
+    - The decryption of the server address is handled inside libxqun.so
+
+P2P decoding analysis:
+    - NOT a Caesar cipher (all 25 rotations produce garbage)
+    - NOT Atbash
+    - NOT XOR with single byte key
+    - NOT Vigenère
+    - The encoding uses the 'CommAddr2ReversAddr' function in libxqun.so
+    - This is the proprietary XQ/XiongMai substitution cipher
+    - The same cipher is used across thousands of camera models
+
+P2P protocol capabilities (from libxqun.so strings):
+    - Remote alarm push (motion detection, relay trigger, PTZ)
+    - Remote display control (brightness, contrast, flip, night mode)
+    - Remote email/FTP/SMTP config push (including PLAINTEXT passwords!)
+    - Remote WiFi configuration push
+    - Remote firmware check/update
+    - P2P login sequence: HI_P2P_LOGIN
+    - Device-to-cloud keepalive thread
+    - Stream control via P2P relay
+    - Multiple server address slots (addr0, addr1, addr2)
+
+*** SECURITY IMPACT: HIGH — Once the P2P server is identified/decoded, an
+    attacker knowing the UID can remotely control the camera through the
+    cloud relay. The server address obfuscation provides NO real security
+    as the algorithm is symmetric and embedded in firmware.
+
+
+================================================================================
+5. BINARY OBFUSCATION — EXECUTABLES DISGUISED AS ZIP FILES
+================================================================================
+
+The key binaries are NOT plain ELF files on the filesystem. Instead, they
+are stored as ZIP archives and extracted to tmpfs at boot:
+
+From: jffs2_extracted/mnt/mtd/ipc/run (function executevs):
+
+    unzip -o $TARGET/ipc_server -d $TARGET/tmpfs/
+    unzip -o $TARGET/libNetLib.so -d $TARGET/tmpfs/
+    unzip -o $TARGET/libXqAPILib.so -d $TARGET/tmpfs/
+    unzip -o $TARGET/libxqun.so -d $TARGET/tmpfs/
+
+Confirmed: all four files are Zip archives containing ELF ARM binaries:
+    - ipc_server     (469,535 bytes zipped → ELF 32-bit ARM executable)
+    - libNetLib.so   (81,372 bytes zipped → ELF 32-bit ARM shared object)
+    - libXqAPILib.so (6,161 bytes zipped → ELF 32-bit ARM shared object)
+    - libxqun.so     (124,497 bytes zipped → ELF 32-bit ARM shared object)
+
+*** SECURITY IMPACT: This is an anti-analysis technique. Standard file(1)
+    reports these as "Zip archive" rather than "ELF executable". Most
+    automated analysis tools would miss the real ELF content. Malware
+    scanners looking for ELF binaries on the filesystem would find nothing.
+
+
+================================================================================
+6. COMMAND INJECTION SURFACE (ipc_server analysis)
+================================================================================
+
+From extracted ipc_server binary strings:
+
+    ====================================
+    CGI endpoints (param.cgi prefix):
+    ====================================
+      alarmcfg&-act=set&
+      alarmcfg&-cgiact=set&
+      audiocfg&-act=set&
+      3gcfg&-act=set&
+      backup.cgi
+      checkiris.cgi
+      checkpixel.cgi
+      chkwirelessattr.cgi
+      cleanlog.cgi
+      gettimerreboot.cgi
+      -- and many more CGI endpoints --
+
+    ====================================
+    Dangerous functions present:
+    ====================================
+      system()        (C standard library)
+      popen()         (C standard library)
+      execv/execvp    (C standard library)
+      HI_Execv/HI_Execvp (custom wrappers)
+      strcpy/strcat   (unbounded string copies)
+      sprintf         (unbounded format string)
+      SSI #exec       (Server-Side Include execution!)
+
+    ====================================
+    SSI #exec vulnerability:
+    ====================================
+      "Bad SSI #exec: [%s]"
+      "Cannot SSI #exec: [%s]: %s"
+      This means the web server SUPPORTS server-side HTML include
+      directives with code execution. The #exec directive runs
+      arbitrary shell commands from within HTML templates.
+
+    ====================================
+    SSI command injection (from SSI handler):
+    ====================================
+      "cat /proc/cmdline > /mnt/mtd/ipc/tmpfs/efuse.tmp"
+      This is a hardcoded system command run via SSI.
+
+*** SECURITY IMPACT: CRITICAL — ipc_server uses popen(), system(), and
+    SSI #exec for shell command execution. The CGI interface handling
+    with act=set& parameters, combined with unbounded strcpy/sprintf,
+    creates a command injection surface. SSI #exec alone allows
+    arbitrary command execution through crafted HTML requests.
+
+
+================================================================================
+7. PATH TRAVERSAL — CUSTOM CONFIG FILE INJECTION
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/conf/config_devtypese.ini
+
+    [customcfg]
+    product = "../../tmpfs/hacked.txt"
+    vendor  = "test"
+
+This is EXTREMELY suspicious. The `customcfg:product` field contains a path
+traversal reference (../../tmpfs/hacked.txt). This file does NOT exist in
+the default clean firmware extract. This appears to be:
+
+    a) A remnant of the malware infection that hijacked this camera
+    b) A vector where custom product overlay files are loaded from
+       arbitrary filesystem paths
+
+The reference `../../tmpfs/hacked.txt` resolves to:
+    /mnt/mtd/ipc/tmpfs/hacked.txt → /tmp/hacked.txt
+
+The fact that the filename is literally "hacked.txt" and the vendor is "test"
+strongly suggests this camera was compromised and this config file was
+modified by the attacker.
+
+*** SECURITY IMPACT: HIGH — Path traversal in the custom configuration
+    parser allows an attacker who can modify config files (through the
+    web interface or P2P push) to reference arbitrary files on the
+    filesystem. This was likely used by the malware to inject a
+    persistence mechanism or configuration override.
+
+
+================================================================================
+8. FACTORY DDNS SERVICE
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/conf/config_facddns.ini
+
+    [facddnscfg]
+    facserver   = "hipcam.org"
+    facport     = "80"
+    facinterval = "180"
+
+The camera registers with "hipcam.org" (port 80) every 180 seconds.
+The gerddns binary handles the registration with a custom protocol.
+
+*** SECURITY IMPACT: The camera phones home to the manufacturer's servers
+    even without P2P enabled. This provides a backchannel for tracking
+    and potentially remote access.
+
+
+================================================================================
+9. WIFI AP MODE — INSECURE DEFAULTS
+================================================================================
+
+When the camera enters WiFi AP mode (Adhoc fallback):
+
+    SSID:    IPCAM-<uuid_suffix>   (e.g., IPCAM-142493)
+    Auth:    WPA2PSK
+    Key:     01234567              (HARDCODED!)
+    IP:      192.168.1.88
+    GW:      192.168.1.1
+
+The WPA2 key "01234567" is hardcoded in the `run` and `chg_net.sh` scripts.
+
+*** SECURITY IMPACT: Anyone within WiFi range can connect to the camera's
+    AP using the well-known key "01234567" and then access telnet, web,
+    RTSP, and ONVIF services. This is a trivial physical-proximity attack.
+
+
+================================================================================
+10. U-BOOT BOOTLOADER ANALYSIS
+================================================================================
+
+From: mtd0_uboot.bin
+
+    U-Boot 2012.10 (Apr 17 2017) for GK7102 rb sc1045 v2.00 (GOKE)
+
+    Environment variables:
+      baudrate=115200
+      bootdelay=5        (5 seconds to interrupt autoboot)
+      consoledev=ttySGK0  (serial console active!)
+      ethaddr=3C:97:0E:22:E1:14
+      ipaddr=11.1.4.200
+      serverip=11.1.4.19
+      netmask=255.255.255.0
+      gatewayip=11.1.4.1
+      nfsserver=11.1.4.19
+      hostname="gk7101"
+      mem=46M
+      soctype=0
+      phytype=0
+      loadaddr=0xC1000000
+      sfboot=... (SPI flash boot with UBIFS root)
+      tftpboot=... (alternate TFTP/NFS boot)
+
+    Default SPI flash layout (sfkernel=0x50000):
+      0x00000 - 0x4FFFF: U-Boot (320KB)
+      0x50000 - ........: Kernel
+      ........ - ........: Rootfs (UBIFS via UBI on mtd3)
+
+    No bootloader password protection found. Autoboot can be interrupted
+    with any key within 5 seconds, giving full U-Boot shell access.
+    From U-Boot, flash can be read/written, and an attacker can:
+      - Dump firmware
+      - Flash modified firmware (no signature verification!)
+      - Boot alternate kernels via TFTP
+      - Modify U-Boot environment for persistence
+
+*** SECURITY IMPACT: HIGH — U-Boot has NO password, NO secure boot,
+    NO firmware signature verification. Bootdelay of 5 seconds is
+    sufficient for physical attackers to gain full control via serial.
+    TFTP boot option enables network-based firmware replacement.
+
+
+================================================================================
+11. NETWORK SERVICES
+================================================================================
+
+From config files and binary analysis:
+
+    Service     Port    Auth        Notes
+    -------     ----    ----        -----
+    HTTP        80      Basic/Basic Web admin, CGI endpoints
+    RTSP        554     Optional    Video streaming (rtspauth=n by default)
+    RTP         6600    None        Video data
+    RTMP        1935    None        Flash video stream
+    ONVIF       8080    Optional    ONVIF device management (ovauthflag=0 default)
+    Telnet      23      NONE        Root shell (!!)
+    P2P/UDP     Dynamic None        XQ Protocol cloud relay
+    UPnP        Auto    None        Port mapping via UPnP IGD
+    DHCP        Client  None        Hostname: "IPCAM" or "IPCamera"
+    NTP         Client  None        time.nist.gov (ntp update enabled)
+    DNS         Client  None        Used for DDNS updates
+
+All services (including ONVIF and RTSP) have authentication DISABLED by
+default in the factory config.
+
+*** SECURITY IMPACT: The device exposes 5+ services on the LAN with
+    default/disabled authentication and a root telnet shell. It is
+    trivially exploitable by any device on the same network segment.
+
+
+================================================================================
+12. SECURE BOOT / FIRMWARE VERIFICATION — ABSENT
+================================================================================
+
+    - No kernel signature verification found
+    - U-Boot loads kernel from SPI flash without any integrity check
+    - Root filesystem has no dm-verity or integrity protection
+    - The `upgrade` binary exists for firmware updates — no evidence of
+      signature checking
+    - All P2P configuration can be pushed remotely via P2P protocol
+
+*** SECURITY IMPACT: CRITICAL — No chain of trust exists. An attacker
+    who gains root access can permanently modify the firmware. The
+    bootloader itself can be reflashed with no verification.
+
+
+================================================================================
+13. sd_first BINARY ANALYSIS
+================================================================================
+
+From: jffs2_extracted/mnt/mtd/ipc/sd_first
+Type: ELF 32-bit ARM executable (stripped, uClibc, entry 0x88a8)
+
+Key operations:
+    - Checks /mnt/mtd/ipc/tmpfs/sd/.sd_flag for SD card presence
+    - Scans /sys/bus/mmc/devices for mmcblk devices
+    - Mounts SD card to /mnt/mtd/ipc/tmpfs/sd
+    - Runs dosfsck (FAT filesystem check)
+    - Calls /mnt/mtd/ipc/fdisk.sh for formatting new SD cards
+    - Reports "Check sd card OK!" or "Check sd card FAIL!"
+    - Creates marker files: sd.ok, sd.fail
+
+Security-relevant functions:
+    - system("killall -9 dosfsck")  — SIGKILL to fsck process
+    - system("rm -f /mnt/mtd/ipc/tmpfs/sd/fsck* ; rm -f ...")
+    - system("/mnt/mtd/ipc/fdisk.sh %s")  — external script call
+    - system("/mnt/mtd/ipc/cdisk.sh %s")  — external script call
+    - system("mdev -s")  — device manager trigger
+    - mount/umount calls with specific options (vfat, errors=remount-ro)
+
+No command injection vectors obvious in static analysis, but the external
+script calls with format strings suggest dynamic path construction.
+
+*** SECURITY IMPACT: LOW directly, but the SD card mount path creates
+    an avenue for file-based attacks if the SD card is physically
+    accessible or if the mount point symlink is exploited.
+
+
+================================================================================
+14. INFECTION INDICATORS
+================================================================================
+
+Based on analysis, evidence of compromise:
+
+    1. config_devtypese.ini contains:
+       product = "../../tmpfs/hacked.txt"  (PATH TRAVERSAL!)
+       vendor = "test"
+       This is NOT a factory default.
+
+    2. The filename suffix "-se" (se = special edition?) suggests this
+       config file differs from standard config_devtype.ini
+
+    3. ipc_server.bak, libNetLib.so.bak, libXqAPILib.so.bak, libxqun.so.bak
+       exist alongside the "active" versions — backup files of the original
+       binaries preserved by some process. The backup files are IDENTICAL
+       in size to the active ones, suggesting the "bak" copies are the
+       originals and the "active" ones may have been modified.
+
+    4. System date hardcoded to 2017.08.29-04:10:11 suggests this firmware
+       was captured/restored but never had NTP sync.
+
+    5. P2P UUID "IIII-142493-FBBBC" — the "IIII" prefix is unusual
+       and may indicate a mass-registered or injected device identifier.
+
+    6. The unrestricted telnet shell is the PRIMARY infection vector for
+       Mirai and similar IoT botnets targeting this camera platform.
+
+    7. No video recordings found in SD card mounts (/mnt/mtd/ipc/tmpfs/sd/
+       was empty in the JFFS2 dump — SD card was not mounted at time of
+       extraction).
+
+
+================================================================================
+15. KERNEL DEEP ANALYSIS SUMMARY
+================================================================================
+
+    - No hardcoded IP addresses found (uses DHCP by default)
+    - No hidden kernel backdoor accounts detected
+    - Standard Goke GK7101 kernel config with WiFi (MediaTek MT7601U),
+      Ethernet, SPI flash, SD/MMC, USB
+    - Kernel compiled with:
+        GK7101 debug console
+        Watchdog timer (GK7101 WDT)
+        JFFS2 filesystem
+        UBIFS filesystem
+        IPv4/IPv6 networking
+        Netfilter/iptables
+        USB gadget (MUSB-GK7101)
+        SPINAND flash support
+    - No kernel command line backdoors in default config
+    - No suspicious kernel modules loaded (standard set)
+
+================================================================================
+16. TIMELINE SUMMARY
+================================================================================
+
+    Date            Event
+    ----            -----
+    2017-04-17      Kernel 3.4.43-gk built (root@localhost.localdomain)
+    2017-04-17      U-Boot 2012.10 built for GK7102 rb sc1045 v2.00
+    2017-06-16      config_onvif.ini dated (factory configuration)
+    2017-07-06      config_ntp.ini dated
+    2017-08-29      Hardcoded system date set at boot
+    Unknown         Camera deployed with factory firmware
+    Unknown         P2P server address and UUID provisioned
+    Aug 2023        Infection period (user's query mentions this)
+    Unknown         Firmware "bak" files created (backups of originals?)
+    Unknown         config_devtypese.ini modified with path traversal
+    Jul 2026        Deep forensic analysis performed
+
+
+================================================================================
+17. ATTACK SURFACE SUMMARY — RANKED BY SEVERITY
+================================================================================
+
+CRITICAL:
+    [C1] Unconditional telnetd root shell on port 23
+    [C2] No secure boot — unsigned firmware accepted by bootloader
+    [C3] SSI #exec command injection in web server
+    [C4] popen()/system() calls in CGI handlers (command injection)
+    [C5] No firmware update signature verification
+
+HIGH:
+    [H1] Default credentials admin/admin, user/user, guest/guest
+    [H2] P2P cloud relay enabled by default (xqunenable=1)
+    [H3] WiFi AP with hardcoded key "01234567"
+    [H4] Factory DDNS registration to hipcam.org
+    [H5] U-Boot serial console accessible, no password
+    [H6] Path traversal in custom config loader
+    [H7] P2P protocol pushes config including plaintext passwords
+
+MEDIUM:
+    [M1] RTSP authentication disabled by default
+    [M2] ONVIF authentication disabled by default
+    [M3] UPnP port mapping enabled, auto-exposes services
+    [M4] NTP sync to time.nist.gov may leak device presence
+    [M5] Config files stored in plaintext (no encryption)
+
+LOW:
+    [L1] Information disclosure via web server version/headers
+    [L2] No HTTPS/TLS for web admin interface
+    [L3] Factory default IP 192.168.1.88 broadcast via DHCP hostname
+
+
+================================================================================
+18. MITIGATIONS
+================================================================================
+
+For users of this camera:
+    1. Place behind NAT/firewall — never expose directly to internet
+    2. Block outbound connection to 47.91.149.233 (P2P server)
+    3. Change all default passwords immediately
+    4. Disable telnetd by modifying startup scripts
+    5. Disable P2P by setting xqunenable=0
+    6. Disable WiFi AP mode or change the default key
+    7. Isolate on separate VLAN with no internet access
+
+For researchers:
+    1. The XQ cipher needs full reverse engineering from libxqun.so
+    2. The P2P protocol can be fuzzed to find additional vulnerabilities
+    3. U-Boot serial access enables firmware extraction and modification
+    4. The "bak" files should be diffed against the active binaries
+       to determine what was modified during the compromise
+
+
+================================================================================
+END OF ANALYSIS
+================================================================================

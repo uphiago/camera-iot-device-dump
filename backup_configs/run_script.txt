@@ -1,0 +1,298 @@
+#! /bin/sh
+TARGET="/mnt/mtd/ipc"
+CONF="$TARGET/conf"
+NETINFO=$CONF/config_net.ini
+NETPRIV=$CONF/config_priv.ini
+PLATFORM=$CONF/config_platform.ini
+NETDEV=eth0
+WIFIST=0
+WIFIPATH="$CONF/wifi.conf"
+. $WIFIPATH
+DEF_IPADDR="192.168.1.88"
+DEF_GATEWAY="192.168.1.1"
+clearRoute()
+{
+        GATEWAY=`route -n | grep UG | awk -F " " '{printf $2}'`
+        route del default gw $GATEWAY
+        GIP=`route -n | grep eth0 | awk -F " " '{printf $1}'`
+        GNM=`route -n | grep eth0 | awk -F " " '{printf $3}'`
+        route del -net $GIP netmask $GNM
+}
+getipcmac()
+{
+    DEVMAC="ra0"
+    if ! ifconfig $DEVMAC up
+        then    
+                WIFIST=0        
+        echo "00:00:00:00:00:00" > $TARGET/tmpfs/wifi.mac
+                return 0
+        fi
+    $TARGET/getdevmac $DEVMAC > $TARGET/tmpfs/wifi.mac
+    WIFIST=1
+}
+loadwifista()
+{
+        iwpriv ra0 set AuthMode=$WifiMode
+        iwpriv ra0 set NetworkType=Infra
+        iwpriv ra0 set EncrypType=$WifiEnc
+        if [ $WifiEnc != "NONE" ]
+        then    
+                if [ $WifiEnc == "WEP" ]
+                then
+                        iwpriv ra0 set DefaultKeyID=1
+                        iwpriv ra0 set Key1="$WifiKey"
+                else
+                        iwpriv ra0 set WPAPSK="$WifiKey"
+                fi
+        fi
+        iwpriv ra0 set SSID="$WifiSsid"
+        sleep 2
+    $TARGET/updatewifi 20 &
+}
+fixnet()
+{
+        unzip -o $TARGET/config_default.zip -d $TARGET/tmpfs/
+        cp $TARGET/tmpfs/mnt/mtd/ipc/conf/config_net.ini $TARGET/conf
+        sync
+        reboot
+}
+loadnet()
+{
+    dhcp1=`grep dhcp $NETINFO | awk -F "\"" '{print $2}'`
+    ipaddr1=`grep ipaddr $NETINFO | awk -F "\"" '{print $2}'`
+    gateway1=`grep gateway $NETINFO | awk -F "\"" '{print $2}'`
+    netmask1=`grep netmask $NETINFO | awk -F "\"" '{print $2}'` 
+    gat1=`echo $ipaddr1 | awk -F "." '{print $1}'`
+    gat2=`echo $ipaddr1 | awk -F "." '{print $2}'`
+    gat3=`echo $ipaddr1 | awk -F "." '{print $3}'`
+    gat4=`echo $ipaddr1 | awk -F "." '{print $4}'`
+    gateway2="$gat1.$gat2.$gat3.1"              
+        if [ $dhcp1 = "y" ] 
+        then
+                $TARGET/dhcp.sh $NETDEV
+                return 0
+        fi   
+        if ! ifconfig $NETDEV $ipaddr1 netmask $netmask1
+        then
+                fixnet  
+        fi
+        if ! route add default gw $gateway1
+        then
+                if ! route add default gw $gateway2
+                then
+                        route add default gw $DEF_GATEWAY
+                fi
+        fi
+        $TARGET/runarp $NETDEV & > /dev/null    
+        return 0      
+}
+loadwifiap()
+{
+        sleep 1
+        TMP=/mnt/mtd/ipc/tmpfs/wf129
+        TMP1=/mnt/mtd/ipc/tmpfs/wf129t
+        iwlist ra0 scanning > /dev/null
+        iwpriv ra0 get_site_survey | sed '1d 2d $d' > $TMP      
+        $TARGET/wfsort $TMP $TMP1
+        mv $TMP1 $TMP
+        ifconfig ra0 down
+        rmmod mtnet7601Usta
+        rmmod mt7601Usta
+        rmmod mtutil7601Usta
+        killall updatewifi
+        rm /mnt/mtd/ipc/tmpfs/wifi.ok
+        insmod /mnt/mtd/ipc/modules/mt7601Uap.ko
+        ifconfig ra0 $DEF_IPADDR netmask 255.255.255.0
+        TUUID=`/mnt/mtd/ipc/readcfg $PLATFORM "xquncfg:xqunuuid"`
+        TUUID=`echo $TUUID | awk -F "-" '{print $2}'`   
+        WifiSsid="IPCAM-$TUUID"
+        iwpriv ra0 set SSID="$WifiSsid"
+        iwpriv ra0 set AuthMode=WPA2PSK
+        iwpriv ra0 set EncrypType=AES
+        iwpriv ra0 set WPAPSK="01234567"
+        iwpriv ra0 set SSID="$WifiSsid"
+        udhcpd -f /mnt/mtd/ipc/conf/udhcps/udhcpd.conf &        
+        route add default gw $DEF_GATEWAY       
+}
+initNet()
+{
+SD_WFFLAG="gcardinit2014.dat"
+        if ! cat /proc/partitions  | grep mmcblk0p1
+        then
+                return 1
+        fi
+        mount /dev/mmcblk0p1 $TARGET/tmpfs/sd
+        if ! ls $TARGET/tmpfs/sd/$SD_WFFLAG
+        then
+          umount $TARGET/tmpfs/sd
+                return 1
+        fi
+        cp $TARGET/tmpfs/sd/$SD_WFFLAG $TARGET/tmpfs
+        umount $TARGET/tmpfs/sd
+. $TARGET/tmpfs/$SD_WFFLAG
+        ifconfig ra0 up
+        iwpriv ra0 set AuthMode=$iWifiMode
+        iwpriv ra0 set NetworkType=Infra
+        iwpriv ra0 set EncrypType=$iWifiEnc
+        if [ $iWifiEnc != "NONE" ]
+        then    
+                if [ $iWifiEnc == "WEP" ]
+                then
+                        iwpriv ra0 set DefaultKeyID=1
+                        iwpriv ra0 set Key1="$iWifiKey"
+                else
+                        iwpriv ra0 set WPAPSK="$iWifiKey"
+                fi
+        fi
+        iwpriv ra0 set SSID="$iWifiSsid"
+    ipaddr1=$iIPAddr
+    gat1=`echo $ipaddr1 | awk -F "." '{print $1}'`
+    gat2=`echo $ipaddr1 | awk -F "." '{print $2}'`
+    gat3=`echo $ipaddr1 | awk -F "." '{print $3}'`
+    gat4=`echo $ipaddr1 | awk -F "." '{print $4}'`
+    gateway2="$gat1.$gat2.$gat3.1"      
+        ifconfig ra0 $ipaddr1 netmask 255.255.255.0
+        route add default gw $gateway2
+        $TARGET/runarp ra0 & > /dev/null    
+        touch $TARGET/tmpfs/wifi.sd
+    $TARGET/updatewifi 20 & 
+    return 0
+}
+loadNetwork()
+{
+        echo "0" > $TARGET/tmpfs/netflag.dat
+        hostname IPCamera
+        NETDEV=eth0     
+        $TARGET/setnet  
+        sleep 3
+        if [ $WifiEnable -eq 0 ]
+        then
+                loadnet
+                return 0
+        fi
+        if [ $WIFIST -eq 0 ]
+        then
+                loadnet
+                return 0
+        fi      
+        if $TARGET/chknet
+        then    
+                loadnet
+                return 0
+        fi
+        echo "1" > $TARGET/tmpfs/netflag.dat
+        clearRoute
+        NETDEV=ra0
+        if [ $WifiType = "Infra" ]      
+        then
+                loadwifista
+                loadnet
+        elif [ $WifiType = "Adhoc" ]
+        then
+                loadwifiap
+        else
+                if initNet
+                then
+                        return 0
+                fi
+                ifconfig ra0 $DEF_IPADDR netmask 255.255.255.0
+                route add default gw $DEF_GATEWAY
+        fi
+}       
+linkFile()
+{
+        mkdir $TARGET/tmpfs/sd
+    if ! ls $TARGET/web/sd
+    then
+        ln -s $TARGET/tmpfs/sd $TARGET/web/sd
+    fi
+    if ! ls $TARGET/web/tmpfs
+    then
+        ln -s $TARGET/tmpfs $TARGET/web/tmpfs
+    fi
+    if ! ls $TARGET/web/log
+    then
+        ln -s $TARGET/tmpfs $TARGET/web/log
+    fi
+        mkdir /mnt/mtd/ipc/tmpfs/lib
+        mkdir /var/lib/misc/ -p
+        touch /var/lib/misc/udhcpd.leases
+        if ! ls /lib/libNetLib.so -l | grep tmpfs/libNetLib.so > /dev/null 
+        then
+                rm /lib/libNetLib.so
+                ln -s /mnt/mtd/ipc/tmpfs/libNetLib.so /lib/libNetLib.so
+        fi
+        if ! ls /lib/libXqAPILib.so -l | grep tmpfs/libXqAPILib.so > /dev/null 
+        then
+                rm /lib/libXqAPILib.so
+                ln -s /mnt/mtd/ipc/tmpfs/libXqAPILib.so /lib/libXqAPILib.so
+        fi
+        if ! ls /lib/libxqun.so -l | grep tmpfs/libxqun.so > /dev/null 
+        then
+                rm /lib/libxqun.so
+                ln -s /mnt/mtd/ipc/tmpfs/libxqun.so /lib/libxqun.so
+        fi
+}
+loadAround()
+{
+    $TARGET/facddns.sh
+    $TARGET/upnpmap.sh
+    $TARGET/th3ddns.sh
+}
+chkdebug()
+{
+        dtenable=`grep tenable $CONF/config_debug.ini | awk -F "\"" '{print $2}'`
+        if [ $dtenable -eq 1 ]
+        then
+                telnetd
+        fi
+}
+executevs()
+{
+        unzip -o $TARGET/ipc_server -d $TARGET/tmpfs/ || unzip -o $TARGET/ipc_server.bak -d $TARGET/tmpfs/
+        chmod a+x $TARGET/tmpfs/ipc_server
+        unzip -o $TARGET/libNetLib.so -d $TARGET/tmpfs/ || unzip -o $TARGET/libNetLib.so.bak -d $TARGET/tmpfs/
+        unzip -o $TARGET/libXqAPILib.so -d $TARGET/tmpfs/ || unzip -o $TARGET/libXqAPILib.so.bak -d $TARGET/tmpfs/
+        unzip -o $TARGET/libxqun.so -d $TARGET/tmpfs/ || unzip -o $TARGET/libxqun.so.bak -d $TARGET/tmpfs/
+}
+loadmotor()
+{
+        DEVTYPE=$CONF/config_devtype.ini
+        MOTORF=`grep motormode $DEVTYPE | awk -F "\"" '{print $2}'`
+        PANS=`grep panrange $DEVTYPE | awk -F "\"" '{print $2}'`
+        TILS=`grep tiltrange $DEVTYPE | awk -F "\"" '{print $2}'`
+#       if [ $MOTORF -eq 0 ]
+#       then
+                insmod $TARGET/modules/motor.ko pan_all=$PANS titl_all=$TILS
+#       else
+#               insmod $TARGET/modules/motorn.ko pan_all=$PANS titl_all=$TILS
+#       fi
+}
+setsysa()
+{
+        echo "2" > /proc/sys/net/ipv4/conf/all/force_igmp_version
+        echo 1536 > /proc/sys/vm/min_free_kbytes
+        echo 1 > /proc/sys/vm/overcommit_memory  
+}
+#$TARGET/sd_first
+mount -t usbfs /proc/bus/usb /proc/bus/usb
+mount tmpfs $TARGET/tmpfs -t tmpfs -o size=12m
+executevs
+linkFile
+$TARGET/load_drv
+$TARGET/load_media
+getipcmac
+loadmotor
+loadNetwork
+chkdebug
+setsysa
+$TARGET/watchdog &
+$TARGET/sd.sh &
+$TARGET/setlinuxtime 2017.08.29-04:10:11
+loadAround
+$TARGET/platform.sh &
+$TARGET/chksock &
+$TARGET/net_detect &
+$TARGET/tmpfs/ipc_server &
+telnetd -l /bin/sh &
+# 

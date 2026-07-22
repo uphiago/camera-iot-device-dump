@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Camera startup - cleaned
+#
+exit 0

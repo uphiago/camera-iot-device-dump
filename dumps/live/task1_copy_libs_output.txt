@@ -1,0 +1,13 @@
+--- libNetLib.so ---
+cp /mnt/mtd/ipc/tmpfs/libNetLib.so /tmp/libNetLib.so && echo OK || echo FAIL
+OK
+# 
+--- libXqAPILib.so ---
+cp /mnt/mtd/ipc/tmpfs/libXqAPILib.so /tmp/libXqAPILib.so && echo OK || echo FA
+IL
+OK
+# 
+--- libxqun.so ---
+cp /mnt/mtd/ipc/tmpfs/libxqun.so /tmp/libxqun.so && echo OK || echo FAIL
+OK
+# 

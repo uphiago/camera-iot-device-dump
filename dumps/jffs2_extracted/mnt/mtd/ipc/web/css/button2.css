@@ -1,0 +1,22 @@
+﻿a.tryitbtn,a.tryitbtn:link,a.tryitbtn:visited,a.showbtn,a.showbtn:link,a.showbtn:visited
+{
+	display:block;
+	color:#FFFFFF;
+	background-color:#666666;
+	font-size:12px;
+	width:60px;
+	text-align:center;
+	padding-top:3px;
+	padding-bottom:4px;
+	border:1px solid #ffffff;
+	outline:1px solid #98bf21;
+	text-decoration:none;
+	margin-left:1px;
+	padding-right: 0;
+	padding-left: 0;
+}
+
+a.tryitbtn:hover,a.tryitbtn:active,a.showbtn:hover,a.showbtn:active
+{
+background-color:#887781;
+}

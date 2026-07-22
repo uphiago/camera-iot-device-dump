@@ -1,0 +1,18 @@
+=== hw_crypto.ko (Goke Crypto Driver) ===
+gk_crypto_ProcessData - Main crypto processing function
+description=GOKE crypto Driver
+author=GOKE MICROELECTRONICS Inc.
+vermagic=3.4.43-Goke
+crypto initialized (10:11)
+gk7101_crypto_open / gk7101_crypto_close / gk7101_crypto_ioctl
+
+=== encipher.ko (Encryption Wrapper) ===
+gk_des - DES cipher support
+sha1  - SHA1 hash support
+API: Linux scatterlist.h (DMA scatter-gather)
+
+=== encript.ko (User-space Device) ===
+Device: /dev/encript (mknod c 244 0, mode 666)
+Author: HX (Hichip)
+Functions: encript_open, encript_close
+Init: encript driver init successful!

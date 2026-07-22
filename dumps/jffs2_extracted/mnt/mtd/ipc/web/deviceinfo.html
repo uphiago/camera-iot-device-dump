@@ -1,0 +1,150 @@
+<html>
+<head>
+<title>ipCAM</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">	
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT"> 
+
+<script src="cgi-bin/hi3510/param.cgi?cmd=getserverinfo&cmd=getnetattr&cmd=getstreamnum&cmd=getourddnsattr&cmd=get3thddnsattr&cmd=getaudioflag&cmd=getdevtype" type="text/javascript"></script>
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/deviceinfo.js"></script>
+
+<script type="text/javascript">
+function on_load()
+{
+	if (audioflag == 0) {
+		document.getElementById("sdcard").style.display = "none";
+	}
+
+	load_form_cameraname();
+	load_form_devtype();
+	load_form_networktype();
+	load_form_usernum();
+	load_form_firmware();
+	load_form_webversion();
+	load_form_macaddress();
+	load_form_ipaddr();
+	load_form_submask();
+	load_form_router();
+	load_form_pdns();
+	load_form_sdns();
+	load_form_upnpstatus();
+	load_form_facddnsstatus();
+	load_form_th3ddnsstatus();
+	load_form_starttime();
+	load_form_sdstatus();
+}
+</script>
+
+<link href="css/common.css" rel="stylesheet" type="text/css">
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="on_load()">
+<div id="page">
+<table width="90%" border="0" align="center" cellspacing="10" class="common">
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  
+  <tr>
+    <td width="22%"><span class="conspicuous thick"><script type="text/javascript">document.write(str_devinfo);</script></span></td>
+    <td width="78%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_devname + colon);</script></td>
+    <td><input id="form_cameraname" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_devtype + colon);</script></td>
+    <td><input id="form_devtype" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_netstat + colon);</script></td>
+    <td><input id="form_networktype" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_connnum + colon);</script></td>
+    <td><input name="text" type="text" class="readonlytxt" id="form_usernum" size="22" maxlength="30" readonly="readonly"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_softver + colon);</script></td>
+    <td><input id="form_firmware" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+   <tr>
+    <td><script type="text/javascript">document.write(str_webware + colon);</script></td>
+    <td><input id="form_webversion" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_macaddr + colon);</script></td>
+    <td><input id="form_macaddress" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_ipaddr + colon);</script></td>
+    <td><input id="form_ipaddr" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_submask + colon);</script></td>
+    <td><input id="form_submask" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_gateway + colon);</script></td>
+    <td><input id="form_router" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_1stdns + colon);</script></td>
+    <td><input id="form_pdns" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_2nddns + colon);</script></td>
+    <td><input id="form_sdns" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  
+  
+  <tr>
+    <td><script type="text/javascript">document.write(str_upnpstatus + colon);</script></td>
+    <td><input name="text2" type="text" class="readonlytxt" id="form_upnpstatus" size="22" maxlength="30" readonly="readonly"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_facddnsstatus + colon);</script></td>
+    <td><input id="form_facddnsstatus" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr>
+    <td><script type="text/javascript">document.write(str_th3ddnsstatus + colon);</script></td>
+    <td><input id="form_th3ddnsstatus" type="text" maxlength="30" size="38" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  
+  
+  
+  
+  
+  
+  <tr>
+    <td><script type="text/javascript">document.write(str_sysstart + colon);</script></td>
+    <td><input id="form_starttime" type="text" maxlength="30" size="22" readOnly="readonly" class="readonlytxt"></td>
+  </tr>
+  <tr id="sdcard">
+    <td><script type="text/javascript">document.write(str_sdstat + colon);</script></td>
+    <td><input name="text3" type="text" class="readonlytxt" id="form_sdstatus" size="35" maxlength="30" readonly="readonly">
+      <a href="/sd" target="_blank" style="color:#000000"><script type="text/javascript">document.write(str_sdview);</script>..</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="#" onClick="do_formatsd()" style="color:#6633FF"><script type="text/javascript">document.write(str_sdfat32);</script></a>
+	&nbsp;
+	<a href="#" onClick="do_stopsd()" style="color:#00CC00"><script type="text/javascript">document.write(str_sdstop);</script></a>	</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<form id="form_submit">
+</form>
+
+</div>
+</body>
+</html>

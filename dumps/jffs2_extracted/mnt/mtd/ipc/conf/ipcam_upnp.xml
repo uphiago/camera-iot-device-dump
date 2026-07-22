@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:IPCamera:1</deviceType>
+    <friendlyName>$$DESCNAME$$</friendlyName>
+    <manufacturer>HX</manufacturer>
+    <manufacturerURL>http://www.hichip.net</manufacturerURL>
+    <modelDescription>Hichip Wireless-G Internet Video Camera</modelDescription>
+    <modelName>HXC54G</modelName>
+    <modelNumber>1.0</modelNumber>
+    <modelURL>http://www.hichip.net/</modelURL>
+    <serialNumber>123456789001</serialNumber>
+    <UDN>uuid:HX-ipcamera-V100R002-$$IP$$</UDN>
+    <UPC>123456789</UPC>
+    <serviceList>
+      <service>
+        <serviceType></serviceType>
+        <serviceId></serviceId>
+        <controlURL></controlURL>
+        <eventSubURL></eventSubURL>
+        <SCPDURL></SCPDURL>
+      </service>
+    </serviceList>
+   <presentationURL>http://$$IP$$:$$ADMINPORT$$/</presentationURL>
+  </device>
+</root>

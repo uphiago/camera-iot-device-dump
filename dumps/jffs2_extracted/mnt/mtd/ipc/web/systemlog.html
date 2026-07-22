@@ -1,0 +1,53 @@
+<html>
+<head>       
+<title>ipCAM</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+<script type="text/javascript" src="js/language.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+
+
+<script type="text/javascript">
+
+function cleanlog()
+{
+	var form = document.form2;
+	form.name.name = "-name";
+	form.cururl.value = document.URL ;	
+	form.action="cgi-bin/hi3510/param.cgi"
+    form.submit();
+}
+</script>
+<style type="text/css">
+body{
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font:12px/1.5 Arial;
+}
+</style>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/button.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.STYLE4 {font-size: 15px}
+-->
+</style></head>
+<body>
+<iframe name=frame1 src="/log/syslog.txt" hspace="0" marginwidth="0" width="100%" height="80%" scrolling="auto" frameborder="0"></iframe><br>
+<button type="button" onClick="cleanlog()">
+<script>document.write(str_btn_cleanlog);</script>
+</button>&nbsp;&nbsp;&nbsp;&nbsp;
+<BUTTON onclick=location.reload()>
+            <SCRIPT>document.write(str_refresh);</SCRIPT>
+            </BUTTON>
+    <form name="form2" method="post" >
+    <input name="cmd" type="hidden" value="cleanlog">
+	<input name="cururl" type="hidden">
+	<input name="name" type="hidden" value="sys">
+</form>
+</body>
+</html>

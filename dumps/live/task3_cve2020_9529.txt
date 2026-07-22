@@ -1,0 +1,47 @@
+--- Original user attrs (before reset) ---
+<html>
+<head>
+<title>Login</title>
+<meta content="text/html"; charset="utf-8" http-equiv="content-type">
+<META HTTP-EQUIV="Content-Script-Type" CONTENT="text/javascript">
+<META http-equiv="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+<meta HTTP-EQUIV="Expires" CONTENT="Wed, 22 Jul 2026 20:38:34 GMT">
+</head>
+<body>
+Error: username or password error,please input again.
+</body>
+</html>
+
+
+--- CVE-2020-9529 UDP response: TIMEOUT ---
+
+--- Test with admin:admin ---
+var at_username0="admin";
+var at_password0="admin";
+var at_authlevel0="15";
+var at_username1="user";
+var at_password1="user";
+var at_authlevel1="3";
+var at_username2="guest";
+var at_password2="guest";
+var at_authlevel2="1";
+
+
+--- Restore password response ---
+[Error]Param error.
+
+--- Verify after restore ---
+<html>
+<head>
+<title>Login</title>
+<meta content="text/html"; charset="utf-8" http-equiv="content-type">
+<META HTTP-EQUIV="Content-Script-Type" CONTENT="text/javascript">
+<META http-equiv="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+<meta HTTP-EQUIV="Expires" CONTENT="Wed, 22 Jul 2026 20:38:42 GMT">
+</head>
+<body>
+Error: username or password error,please input again.
+</body>
+</html>

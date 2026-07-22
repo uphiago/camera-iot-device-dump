@@ -1,0 +1,1531 @@
+=== date ===
+date
+Thu Jul 23 03:15:08 STD 2026
+
+=== uname ===
+uname -a
+Linux IPCamera 3.4.43-gk #16 PREEMPT Mon Apr 17 12:13:21 CST 2017 armv6l GNU/Linux
+
+=== cpuinfo ===
+cat /proc/cpuinfo
+Processor       : ARMv6-compatible processor rev 7 (v6l)
+BogoMIPS        : 597.60
+Features        : swp half fastmult vfp edsp java tls 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xb76
+CPU revision    : 7
+
+Hardware        : Goke GK7102 RB_SC1045 board V2.00
+Revision        : 0000
+Serial          : 0000000000000000
+
+=== mtd ===
+cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00040000 00010000 "uboot"
+mtd1: 00010000 00010000 "ubootenv"
+mtd2: 001b0000 00010000 "kernel"
+mtd3: 00e00000 00010000 "rootfs"
+mtd4: 01000000 00010000 "all"
+
+=== mount ===
+mount
+rootfs on / type rootfs (rw)
+/dev/root on / type jffs2 (rw,relatime)
+proc on /proc type proc (rw,relatime)
+tmpfs on /dev type tmpfs (rw,relatime)
+tmpfs on /tmp type tmpfs (rw,relatime)
+sysfs on /sys type sysfs (rw,relatime)
+devpts on /dev/pts type devpts (rw,relatime,mode=600,ptmxmode=000)
+/proc/bus/usb on /proc/bus/usb type usbfs (rw,relatime)
+tmpfs on /mnt/mtd/ipc/tmpfs type tmpfs (rw,relatime,size=12288k)
+/dev/mmcblk0p1 on /mnt/mtd/ipc/tmpfs/sd type vfat (rw,noexec,relatime,fmask=0022,dmask=0022,codepage=cp437,iocharset=iso8859-1,shortname=mixed,errors=continue)
+
+=== df ===
+df -h
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root                14.0M     10.7M      3.3M  77% /
+tmpfs                    18.0M         0     18.0M   0% /dev
+tmpfs                    18.0M      2.0M     16.1M  11% /tmp
+tmpfs                    12.0M      1.6M     10.4M  13% /mnt/mtd/ipc/tmpfs
+/dev/mmcblk0p1           28.8G    539.8M     28.3G   2% /mnt/mtd/ipc/tmpfs/sd
+
+=== free ===
+free
+             total         used         free       shared      buffers
+Mem:         36888        34696         2192            0           44
+-/+ buffers:              34652         2236
+Swap:            0            0            0
+
+=== ps ===
+ps
+PID   USER     TIME   COMMAND
+    1 root       0:04 init
+    2 root       0:00 [kthreadd]
+    3 root       0:00 [ksoftirqd/0]
+    5 root       1:16 [kworker/u:0]
+    6 root       0:00 [khelper]
+    7 root       0:00 [netns]
+    8 root       0:00 [sync_supers]
+    9 root       0:00 [bdi-default]
+   10 root       0:00 [kblockd]
+   11 root       0:00 [khubd]
+   13 root       0:00 [cfg80211]
+   14 root       0:00 [kworker/u:1]
+   15 root       0:00 [rpciod]
+   16 root       0:02 [kswapd0]
+   17 root       0:00 [ksmd]
+   18 root       0:00 [fsnotify_mark]
+   19 root       0:00 [nfsiod]
+   20 root       0:00 [crypto]
+   35 root       0:00 [mtdblock0]
+   36 root       0:00 [mtdblock1]
+   37 root       0:00 [mtdblock2]
+   38 root       0:06 [mtdblock3]
+   39 root       0:00 [mtdblock4]
+   42 root       0:16 [mmcqd/0]
+   43 root       0:00 [deferwq]
+   44 root       0:05 [jffs2_gcd_mtd3]
+  872 root       0:00 [vi_workqueue]
+  903 root       0:00 [gk_debug]
+  904 root       0:00 [encoder]
+  982 root       3:12 [RtmpTimerTask]
+  983 root       2:59 [RtmpMlmeTask]
+  984 root       0:00 [RtmpCmdQTask]
+  985 root       0:00 [RtmpWscTask]
+ 1499 root       0:00 /mnt/mtd/ipc/updatewifi 20
+ 1554 root       0:00 /sbin/getty -L ttySGK0 115200 ttySGK0
+ 1557 root       0:10 /bin/sh /mnt/mtd/ipc/sd.sh
+ 1559 root       0:00 /mnt/mtd/ipc/sd_detect ok
+ 1644 root       0:00 /mnt/mtd/ipc/upnp_map 10:A4:BE:81:D8:FC /mnt/mtd/ipc/tmpf
+ 1666 root       0:00 /mnt/mtd/ipc/chksock
+ 1667 root       0:00 /mnt/mtd/ipc/net_detect
+ 1668 root       0:01 /mnt/mtd/ipc/tmpfs/ipc_server
+ 1678 root      63:40 /mnt/mtd/ipc/tmpfs/ipc_server
+ 1686 root       0:00 [flush-179:0]
+ 1880 root       0:00 /mnt/mtd/ipc/onvif
+ 1881 root       0:01 /mnt/mtd/ipc/onvif
+ 3565 root       0:04 telnetd
+ 9238 root       0:00 [kworker/0:0]
+ 9971 root       0:05 [kworker/0:1]
+10168 root       0:00 -sh
+10177 root       0:00 sleep 15
+10179 root       0:00 [flush-mtd-unmap]
+10185 root       0:00 ps
+
+=== ifconfig ===
+ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:11:22:33:44:55  
+          inet addr:172.20.33.192  Bcast:172.20.255.255  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:1 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:140586 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:140586 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:9358441 (8.9 MiB)  TX bytes:9358441 (8.9 MiB)
+
+ra0       Link encap:Ethernet  HWaddr 10:A4:BE:81:D8:FC  
+          inet addr:192.168.1.10  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:509925 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:29207 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:144531048 (137.8 MiB)  TX bytes:28455492 (27.1 MiB)
+
+
+=== netstat ===
+netstat -tlnp 2>/dev/null
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      1881/onvif
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1678/ipc_server
+tcp        0      0 0.0.0.0:23              0.0.0.0:*               LISTEN      3565/telnetd
+tcp        0      0 0.0.0.0:554             0.0.0.0:*               LISTEN      1678/ipc_server
+tcp        0      0 0.0.0.0:1935            0.0.0.0:*               LISTEN      1678/ipc_server
+
+=== init.d ===
+ls -la /etc/init.d/
+total 3
+drwxrwxrwx    2 root     root             0 Aug 22  2023 [1;34m.[0m
+drwxrwxrwx    5 root     root             0 Jul 22 21:30 [1;34m..[0m
+-rwxrwxrwx    1 root     root           246 Sep 14  2016 [1;32mS10mdev[0m
+-rwxrwxrwx    1 root     root           330 Sep 14  2016 [1;32mS11devnode[0m
+-rwxrw-rw-    1 root     root            69 Sep 14  2016 [1;32mS90ipc[0m
+-rwxrwxrwx    1 root     root            48 Jul 22 21:26 [1;32mS98test[0m
+-rwxrw-rw-    1 root     root           423 Sep 14  2016 [1;32mrcK[0m
+-rwxrwxrwx    1 root     root           408 Sep 14  2016 [1;32mrcS[0m
+
+=== etc ===
+ls -la /etc/
+total 23
+drwxrwxrwx    5 root     root             0 Jul 22 21:30 [1;34m.[0m
+drwxr-xr-x   18 root     root             0 Jan  1  1970 [1;34m..[0m
+lrwxrwxrwx    1 root     root            20 Sep 14  2016 [1;36mTZ[0m -> [1;32m/mnt/mtd/ipc/conf/TZ[0m
+drwxrwxrwx    4 root     root             0 Sep 14  2016 [1;34mWireless[0m
+-rw-rw-rw-    1 root     root           305 Sep 14  2016 [0;0mfstab[0m
+-rwxrw-rw-    1 root     root           268 Sep 14  2016 [1;32mgroup[0m
+-rwxrw-rw-    1 root     root             9 Sep 14  2016 [1;32mhostname[0m
+-rw-rw-rw-    1 root     root            35 Sep 14  2016 [0;0mhosts[0m
+drwxrwxrwx    2 root     root             0 Aug 22  2023 [1;34minit.d[0m
+-rwxrw-rw-    1 root     root           975 Sep 14  2016 [1;32minittab[0m
+-rwxrw-rw-    1 root     root            19 Sep 14  2016 [1;32missue[0m
+-rw-rw-rw-    1 root     root           876 Sep 14  2016 [0;0mmdev.conf[0m
+lrwxrwxrwx    1 root     root            12 Sep 14  2016 [1;36mmtab[0m -> [0;0m/proc/mounts[0m
+-rwxrw-rw-    1 root     root           648 Sep 14  2016 [1;32mpasswd[0m
+-rwxrw-rw-    1 root     root          1874 Sep 14  2016 [1;32mprofile[0m
+-rwxrw-rw-    1 root     root          1191 Sep 14  2016 [1;32mprotocols[0m
+lrwxrwxrwx    1 root     root            29 Sep 14  2016 [1;36mresolv.conf[0m -> [1;32m/mnt/mtd/ipc/conf/resolv.conf[0m
+-rwxrw-rw-    1 root     root           422 Sep 14  2016 [1;32msecuretty[0m
+drwxrwxrwx    2 root     root             0 Sep 13  2016 [1;34msensors[0m
+-rwxrw-rw-    1 root     root         10873 Sep 14  2016 [1;32mservices[0m
+-rwxrw-rw-    1 default  default        390 Jul 22 21:30 [1;32mshadow[0m
+
+=== passwd ===
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/sh
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:100:sync:/bin:/bin/sync
+mail:x:8:8:mail:/var/spool/mail:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+operator:x:37:37:Operator:/var:/bin/sh
+haldaemon:x:68:68:hald:/:/bin/sh
+dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
+ftp:x:83:83:ftp:/home/ftp:/bin/sh
+nobody:x:99:99:nobody:/home:/bin/sh
+sshd:x:103:99:Operator:/var:/bin/sh
+default:x:1000:1000:Default non-root user:/home/default:/bin/sh
+admin:x:1001:1001:Linux User,,,:/home/admin:/bin/sh
+
+=== shadow ===
+cat /etc/shadow
+root:x0uWZqB0iTVNs:0:0:99999:7:::
+bin:*:10933:0:99999:7:::
+daemon:*:10933:0:99999:7:::
+adm:*:10933:0:99999:7:::
+lp:*:10933:0:99999:7:::
+sync:*:10933:0:99999:7:::
+shutdown:*:10933:0:99999:7:::
+halt:*:10933:0:99999:7:::
+uucp:*:10933:0:99999:7:::
+operator:*:10933:0:99999:7:::
+ftp:*:10933:0:99999:7:::
+nobody:*:10933:0:99999:7:::
+default::10933:0:99999:7:::
+admin:x0uWZqB0iTVNs:0:0:99999:7:::
+
+=== configs ===
+cat /mnt/mtd/ipc/conf/config_*.ini 2>/dev/null
+[ddnscfg]                                          
+th3enable                         = "0                  "
+th3srvtype                        = "0                  "
+th3username                       = "myuserid           "
+th3password                       = "mypassword         "
+th3host                           = "mydomain.dyndns.org"
+th3interval                       = "180                "
+[email]                                          
+host                           = "               "
+port                           = "25             "
+user                           = "               "
+passwd                         = "               "
+logintype                      = "1              "
+ssltype                        = "0              "
+from                           = "               "
+to                             = "               "
+subject                        = "               "
+text                           = "               "
+[ftp]                                            
+host                           = "               "
+port                           = "21             "
+user                           = "               "
+passwd                         = "               "
+mode                           = "1              "
+autocreatedir                  = "1              "
+path                           = "./             "
+[relay]
+time                           = "5              "
+[server]                                            
+host                           = "               "
+port                           = "8              "
+user                           = "               "
+passwd                         = "               "
+info                           = "               "
+[cloudstorage]
+type                           = "0              "
+user                           = "               "
+passwd                         = "               "
+appkey                         = "rgwl2xro2dn5xgs"
+appsecret                      = "nxf1p19tk8qodii"
+requesttoken                   = "               "
+accesstoken                    = "               "
+refreshtoken                   = "               "
+[emailsnap]                                          
+enable                         = "0              "
+attachment                     = "0              "
+interval                       = "60             "
+[ftprec]                                            
+enable                         = "0              "
+interval                       = "50             "
+[ftpsnap]                                            
+enable                         = "0              "
+interval                       = "25             "
+[relay]                                          
+enable                         = "0              "
+interval                       = "5              "
+[server]                                         
+enable                         = "0              "
+interval                       = "60             "
+[snap]                                            
+enable                         = "0              "
+interval                       = "5              "
+[record]                                            
+enable                         = "0              "
+interval                       = "30             "
+[preset]
+enable                         = "0              "
+interval                       = "2              "
+[sound]
+enable                         = "0              "
+interval                       = "5              "
+[cloudrec]
+enable                         = "0              "
+interval                       = "60             "
+[cloudsnap]
+enable                         = "0              "
+interval                       = "60             "[push0]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push1]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push2]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push3]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push4]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push5]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push6]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push7]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push8]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push9]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push10]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push11]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push12]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push13]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push14]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push15]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push16]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push17]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push18]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push19]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push20]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push21]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push22]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push23]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push24]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push25]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push26]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push27]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push28]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push29]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push30]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push31]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push32]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push33]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push34]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push35]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push36]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push37]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push38]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push39]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push40]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push41]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push42]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push43]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push44]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push45]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push46]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push47]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push48]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push49]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push50]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push51]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push52]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push53]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push54]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push55]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push56]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push57]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push58]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push59]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push60]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push61]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push62]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+[push63]                                        
+token                         = "               "
+enable                        = "0              "
+timeinterval                  = "0              "
+
+
+
+
+[comattr]                                     
+baud                           = "9600           "
+check                          = "0              "
+databit                        = "8              "
+stopbit                        = "1              "
+[protocalattr]
+address                        = "1              "
+speed                          = "31             "
+protocal                       = "0              "
+[area0]                                     
+x                              = "0              "
+y                              = "0              "
+w                              = "160            "
+h                              = "160            "
+color                          = "000000         "
+enable                         = "0              "
+[area1]                                     
+x                              = "1120           "
+y                              = "0              "
+w                              = "160            "
+h                              = "160            "
+color                          = "000000         "
+enable                         = "0              "
+[area2]                                     
+x                              = "0              "
+y                              = "560            "
+w                              = "160            "
+h                              = "160            "
+color                          = "000000         "
+enable                         = "0              "
+[area3]                                     
+x                              = "1120           "
+y                              = "560            "
+w                              = "160            "
+h                              = "160            "
+color                          = "000000         "
+enable                         = "0              "
+[admin]
+param0                           = "               "
+param1                           = "               "
+param2                           = "               "
+param3                           = "               "
+param4                           = "               "
+param5                           = "               "
+param6                           = "               "
+param7                           = "               "
+param8                           = "               "
+param9                           = "               "
+param10                          = "               "
+param11                          = "               "
+param12                          = "               "
+param13                          = "               "
+param14                          = "               "
+param15                          = "               "
+param16                          = "               "
+param17                          = "               "
+param18                          = "               "
+param19                          = "               "
+param20                          = "               "
+param21                          = "               "
+param22                          = "               "
+param23                          = "               "
+param24                          = "               "
+param25                          = "               "
+param26                          = "               "
+param27                          = "               "
+param28                          = "               "
+param29                          = "               "
+param30                          = "               "
+param31                          = "               "
+param32                          = "               "
+param33                          = "               "
+param34                          = "               "
+param35                          = "               "
+param36                          = "               "
+param37                          = "               "
+param38                          = "               "
+param39                          = "               "
+param40                          = "               "
+param41                          = "               "
+param42                          = "               "
+param43                          = "               "
+param44                          = "               "
+param45                          = "               "
+param46                          = "               "
+param47                          = "               "
+param48                          = "               "
+param49                          = "               "
+[user]
+param0                           = "               "
+param1                           = "               "
+param2                           = "               "
+param3                           = "               "
+param4                           = "               "
+param5                           = "               "
+param6                           = "               "
+param7                           = "               "
+param8                           = "               "
+param9                           = "               "
+param10                          = "               "
+param11                          = "               "
+param12                          = "               "
+param13                          = "               "
+param14                          = "               "
+param15                          = "               "
+param16                          = "               "
+param17                          = "               "
+param18                          = "               "
+param19                          = "               "
+param20                          = "               "
+param21                          = "               "
+param22                          = "               "
+param23                          = "               "
+param24                          = "               "
+param25                          = "               "
+param26                          = "               "
+param27                          = "               "
+param28                          = "               "
+param29                          = "               "
+param30                          = "               "
+param31                          = "               "
+param32                          = "               "
+param33                          = "               "
+param34                          = "               "
+param35                          = "               "
+param36                          = "               "
+param37                          = "               "
+param38                          = "               "
+param39                          = "               "
+param40                          = "               "
+param41                          = "               "
+param42                          = "               "
+param43                          = "               "
+param44                          = "               "
+param45                          = "               "
+param46                          = "               "
+param47                          = "               "
+param48                          = "               "
+param49                          = "               "
+[guest]
+param0                           = "               "
+param1                           = "               "
+param2                           = "               "
+param3                           = "               "
+param4                           = "               "
+param5                           = "               "
+param6                           = "               "
+param7                           = "               "
+param8                           = "               "
+param9                           = "               "
+param10                          = "               "
+param11                          = "               "
+param12                          = "               "
+param13                          = "               "
+param14                          = "               "
+param15                          = "               "
+param16                          = "               "
+param17                          = "               "
+param18                          = "               "
+param19                          = "               "
+param20                          = "               "
+param21                          = "               "
+param22                          = "               "
+param23                          = "               "
+param24                          = "               "
+param25                          = "               "
+param26                          = "               "
+param27                          = "               "
+param28                          = "               "
+param29                          = "               "
+param30                          = "               "
+param31                          = "               "
+param32                          = "               "
+param33                          = "               "
+param34                          = "               "
+param35                          = "               "
+param36                          = "               "
+param37                          = "               "
+param38                          = "               "
+param39                          = "               "
+param40                          = "               "
+param41                          = "               "
+param42                          = "               "
+param43                          = "               "
+param44                          = "               "
+param45                          = "               "
+param46                          = "               "
+param47                          = "               "
+param48                          = "               "
+param49                          = "               "
+[debug]
+denable                        = "0                "
+dserver                        = "192.168.1.88"
+dport                              = "12990        "
+[telnet]
+tenable                        = "1                "
+[blackwhite.ar0130]
+brightness                     = "64             "
+saturation                     = "0              "
+sharpness                      = "32             "
+contrast                       = "24             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "1              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "36             "
+ae                             = "2              "
+targety                        = "70             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.ar0130]
+brightness                     = "64             "
+saturation                     = "110            "
+sharpness                      = "64             "
+contrast                       = "48             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "36             "
+ae                             = "2              "
+targety                        = "80             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[blackwhite.sc1035]
+brightness                     = "64             "
+saturation                     = "0              "
+sharpness                      = "32             "
+contrast                       = "32             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "32             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.sc1035]
+brightness                     = "64             "
+saturation                     = "128            "
+sharpness                      = "64             "
+contrast                       = "16             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "28             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[blackwhite.ov9712]
+brightness                     = "50             "
+saturation                     = "0              "
+sharpness                      = "60             "
+contrast                       = "55             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "3              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.ov9712]
+brightness                     = "50             "
+saturation                     = "120            "
+sharpness                      = "60             "
+contrast                       = "50             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[blackwhite.sc1045]
+brightness                     = "64             "
+saturation                     = "0              "
+sharpness                      = "32             "
+contrast                       = "32             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "1              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "26             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "1              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.sc1045]
+brightness                     = "64             "
+saturation                     = "128            "
+sharpness                      = "64             "
+contrast                       = "36             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "27             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "1              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "0              "
+default                        = "1              "
+[blackwhite.gc1004]
+brightness                     = "64             "
+saturation                     = "0              "
+sharpness                      = "32             "
+contrast                       = "32             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "1              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "1              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.gc1004]
+brightness                     = "64             "
+saturation                     = "128            "
+sharpness                      = "64             "
+contrast                       = "36             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "27             "
+ae                             = "4              "
+targety                        = "64             "
+noise                          = "1              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "0              "
+default                        = "1              "
+[blackwhite.soih42]
+brightness                     = "50             "
+saturation                     = "0              "
+sharpness                      = "60             "
+contrast                       = "55             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "3              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.soih42]
+brightness                     = "50             "
+saturation                     = "120            "
+sharpness                      = "60             "
+contrast                       = "50             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[blackwhite.ov10633]
+brightness                     = "4              "
+saturation                     = "0              "
+sharpness                      = "4              "
+contrast                       = "3              "
+hue                            = "255            "
+wdr                            = "1              "
+night                          = "0              "
+shutter                        = "0              "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "255            "
+ae                             = "4              "
+targety                        = "100            "
+noise                          = "0              "
+gamma                          = "3              "
+aemode                         = "0              "
+imgmode                        = "0              "
+default                        = "1              "
+[color.ov10633]
+brightness                     = "4              "
+saturation                     = "2              "
+sharpness                      = "4              "
+contrast                       = "3              "
+hue                            = "255            "
+wdr                            = "1              "
+night                          = "0              "
+shutter                        = "0              "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "255            "
+ae                             = "4              "
+targety                        = "100            "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "0              "
+default                        = "1              "
+[blackwhite.tvp5150]
+brightness                     = "96             "
+saturation                     = "0              "
+sharpness                      = "128            "
+contrast                       = "96             "
+hue                            = "0              "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "0              "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "255            "
+ae                             = "4              "
+targety                        = "100            "
+noise                          = "0              "
+gamma                          = "3              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.tvp5150]
+brightness                     = "96             "
+saturation                     = "128            "
+sharpness                      = "128            "
+contrast                       = "96             "
+hue                            = "0              "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "0              "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "255            "
+ae                             = "4              "
+targety                        = "100            "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[blackwhite.ov9732]
+brightness                     = "50             "
+saturation                     = "0              "
+sharpness                      = "60             "
+contrast                       = "55             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "3              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[color.ov9732]
+brightness                     = "50             "
+saturation                     = "120            "
+sharpness                      = "60             "
+contrast                       = "50             "
+hue                            = "50             "
+wdr                            = "0              "
+night                          = "0              "
+shutter                        = "65535          "
+flip                           = "0              "
+mirror                         = "0              "
+gc                             = "31744          "
+ae                             = "2              "
+targety                        = "64             "
+noise                          = "0              "
+gamma                          = "1              "
+aemode                         = "0              "
+imgmode                        = "1              "
+default                        = "1              "
+[devices0]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices1]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices2]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices3]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices4]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices5]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices6]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices7]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+[devices8]                                     
+alias                          = "               "
+host                           = "               "
+port                           = "80              "
+username                       = "               "
+password                       = "               "
+
+[identifycfg]
+product                        = "C9F0SeZ0N0P4L0 "
+vendor                         = "HX             "
+
+
+[platformcfg]
+type                           = "7              "
+
+
+[codecfg]
+language                       = "0              "
+
+
+[modecfg]
+logo                           = "0              "
+
+
+[motorcfg]
+panrange                       = "520            "
+tiltrange                      = "160            "
+
+
+
+[customcfg]
+product                        = "../../tmpfs/hacked.txt"
+vendor                         = "test           "
+
+
+[weihaidecfg]
+ratio                          = "0              "
+xoffset                        = "0              "
+yoffset                        = "0              "
+
+
+
+[videocfg]
+resolution                     = "31             "
+powerfreq                      = "50             "
+profile                        = "1              "
+maxchn                         = "2              "
+
+
+[audiocfg]
+intype                         = "1              "
+involume                       = "14             "
+outvolume                      = "9              "
+aec                            = "0              "
+denoise                        = "1              "
+
+
+[videoqpcfg]
+minvideoq                      = "23             "
+maxvideoq1                     = "39             "
+maxvideoq2                     = "41             "
+maxvideoq3                     = "43             "
+maxvideoq4                     = "45             "
+maxvideoq5                     = "48             "
+maxvideoq6                     = "51             "
+
+
+[enc_chn.11]
+vencformat                     = "0              "
+vencbps                        = "1536           "
+vencfps                        = "25             "
+vencgop                        = "50             "
+vencbrmode                     = "0              "
+piclevel                       = "4              "
+aencopen                       = "1              "
+aencformat                     = "1              "
+
+
+[enc_chn.12]
+vencformat                     = "0              "
+vencbps                        = "448            "
+vencfps                        = "25             "
+vencgop                        = "50             "
+vencbrmode                     = "0              "
+piclevel                       = "2              "
+aencopen                       = "1              "
+aencformat                     = "1              "
+
+
+[enc_chn.13]
+vencformat                     = "0              "
+vencbps                        = "256            "
+vencfps                        = "25             "
+vencgop                        = "50             "
+vencbrmode                     = "0              "
+piclevel                       = "4              "
+aencopen                       = "1              "
+aencformat                     = "1              "
+
+
+[facddnscfg]                                          
+facenable                         = "0          "
+facserver                         = "hipcam.org "
+facusername                       = "           "
+facpassword                       = "           "
+fachost                           = "           "
+facinterval                       = "180        "
+facport                           = "80         "
+[global]
+interval                       = "5              "
+[area0]                                     
+x                              = "0              "
+y                              = "0              "
+w                              = "160            "
+h                              = "160            "
+sensitivity                    = "50             "
+enable                         = "0              "
+[area1]                                     
+x                              = "1120           "
+y                              = "0              "
+w                              = "160            "
+h                              = "160            "
+sensitivity                    = "50             "
+enable                         = "0              "
+[area2]                                     
+x                              = "0              "
+y                              = "560            "
+w                              = "160            "
+h                              = "160            "
+sensitivity                    = "50             "
+enable                         = "0              "
+[area3]                                     
+x                              = "1120           "
+y                              = "560            "
+w                              = "160            "
+h                              = "160            "
+sensitivity                    = "50             "
+enable                         = "0              "
+
+[netinfo]
+ipaddr                         = "192.168.1.10   "
+netmask                        = "255.255.255.0  "
+gateway                        = "192.168.1.1    "
+dhcp                           = "n              "
+dnsflag                        = "n              "
+
+
+[netsvr]
+httpport                       = "80             "
+rtspport                       = "554            "
+rtpport                        = "6600           "
+rtspauth                       = "n              "
+rtmpport                       = "1935           "
+
+
+[ntp]                                            
+server                         = "time.nist.gov  "
+interval                       = "1              "
+enable                         = "1              "
+
+[onvifcfg]
+ovenable                       = "1              "
+ovmgmtport                     = "8080           "
+ovauthflag                     = "0              "
+ovdiscoverymode                = "0              "
+ovforbitset                    = "2              "
+ovtz                           = "ChinaStandardTime-8"
+ovsubchn                       = "12             "
+ovsnapchn                      = "12             "
+ovnvctype                      = "0              "
+
+
+[common]                                         
+fcolor                         = "FFFFFF         "
+bcolor                         = "000000         "
+ftrans                         = "192            "
+btrans                         = "64             "
+[region0]                                        
+show                           = "1              "
+x                              = "976            "
+y                              = "0              "
+w                              = "0              "
+h                              = "0              "
+alpha                          = "1              "
+type                           = "2              "
+place                          = "0              "
+format                         = "0              "
+string                         = "YYYY-MM-DD hh:mm:ss"
+[region1]                                        
+show                           = "1              "
+x                              = "0              "
+y                              = "0              "
+w                              = "0              "
+h                              = "0              "
+alpha                          = "1              "
+type                           = "0              "
+place                          = "1              "
+format                         = "0              "
+string                         = "IP Camera      "
+[region2]                                        
+show                           = "1              "
+x                              = "0              "
+y                              = "0              "
+w                              = "0              "
+h                              = "0              "
+alpha                          = "1              "
+type                           = "0              "
+place                          = "0              "
+format                         = "0              "
+string                         = "IP Camera      "
+
+[ourpfcfg]
+oenable                        = "0              "
+oserver                        = "               "
+ouname                         = "               "
+opasswd                        = "               "
+oport                          = "12105          "
+otimeout                       = "5              "
+
+
+[xquncfg]
+xqunenable                     = "1              "
+xqunmode                       = "1              "
+xqunuuid                       = "IIII-142493-FBBBC"
+xqunpuship                     = "47.91.149.233  "
+xqunsvraddr                    = "EKPNAUENAOIFSWSQLPAXPALNAYPGLXHXSUEGLKSZICHUPETAEEEHELHZIHLQPJAOPKEPSQIALUPALOHYLTEREKIDLKIEEOHUEIEJEEEMEN-$$"
+
+
+
+[netinfo]
+macaddr                        = "00:11:22:33:44:55"
+dhcpname                       = "IPCAM          "
+
+
+[default]
+enable                         = "0              "
+ipaddr                         = "192.168.1.88   "
+
+
+[devidcfg]
+devid                          = "test           "
+
+
+[capability]
+audioflag                      = "1              "
+cvbsflag                       = "0              "
+sdflag                         = "1              "
+usbflag                        = "1              "
+
+
+
+[common]
+panspd                         = "2              "
+tiltspd                        = "2              "
+panstep_revadd                 = "0              "
+tiltstep_revadd                = "0              "
+panscantimes                   = "10             "
+tiltscantimes                  = "1              "
+movehome                       = "0              "
+ptzalarmmask                   = "1              "
+alarmpresetindex               = "0              "
+afzoom                         = "0              "
+
+
+[preset|0]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|1]
+panpos                         = "10411128       "
+tiltpos                        = "1              "
+zoompos                        = "0              "
+
+
+[preset|2]
+panpos                         = "10411128       "
+tiltpos                        = "1              "
+zoompos                        = "0              "
+
+
+[preset|3]
+panpos                         = "10411128       "
+tiltpos                        = "1              "
+zoompos                        = "0              "
+
+
+[preset|4]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|5]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|6]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|7]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|8]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|9]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|10]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|11]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|12]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|13]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|14]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[preset|15]
+panpos                         = "0              "
+tiltpos                        = "0              "
+zoompos                        = "0              "
+
+
+[recsnapcfg]                                           
+rectype                         = "1              "                               
+recchn                          = "12             "
+planrecenable                   = "1              "
+planrectime                     = "600             "
+mdrectime                       = "15             "
+snapchn                         = "11             "
+snapcount                       = "1              "
+snapresolution                  = "0              "
+mobileresolution                = "2              "
+snapnamemode                   = "0              "
+snapalarmname                  = "               "
+snaptimername                  = "               "
+[run3gcfg]                                           
+runmode                = "1              "
+apn                                = "3GNET                  "
+dnumber                        = "*99# 
+

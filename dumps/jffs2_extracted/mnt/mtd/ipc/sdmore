@@ -1,0 +1,11 @@
+#! /bin/sh
+
+#echo 1024 > /sys/block/$1/queue/max_sectors_kb
+#echo noop > /sys/block/$1/queue/scheduler
+#/proc/sys/vm/dirty_background_ratio 
+#/proc/sys/vm/dirty_writeback_centisecs 
+#/proc/sys/vm/dirty_expire_centisecs 
+
+echo 512 > /sys/block/$1/queue/read_ahead_kb
+echo 512 > /sys/block/$1/queue/nr_requests
+

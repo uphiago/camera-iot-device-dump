@@ -1,0 +1,40 @@
+#!/bin/sh
+# Sample udhcpc renew script
+
+RESOLV_CONF="/mnt/mtd/ipc/conf/resolv.conf"
+
+killall arping
+killall runarp
+
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+
+if [ -n "$router" ]
+then
+	echo "deleting routers"
+	while /sbin/route del default gw 0.0.0.0 dev $interface
+	do :
+	done
+
+	for i in $router
+	do
+		/sbin/route add default gw $i dev $interface
+	done
+fi
+
+NETINFO="/mnt/mtd/ipc/conf/config_net.ini"
+dhcpdns=`/bin/grep dnsflag $NETINFO | /usr/bin/awk -F "\"" '{print $2}'`
+if [ $dhcpdns = "n" ]
+then
+	exit 0
+fi
+
+echo -n > $RESOLV_CONF
+[ -n "$domain" ] && echo domain $domain >> $RESOLV_CONF
+for i in $dns
+do
+	echo adding dns $i
+	echo nameserver $i >> $RESOLV_CONF
+done

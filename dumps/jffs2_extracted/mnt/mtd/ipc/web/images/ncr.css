@@ -1,0 +1,276 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+caption{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+ol, ul {
+	list-style: none;
+}
+BODY {
+	FONT-SIZE: 11px; MARGIN: 0px; COLOR: #333333; FONT-FAMILY: Arial, sans-serif; BACKGROUND-COLOR: #ffffff
+}
+A {
+	COLOR: #000000;
+	TEXT-DECORATION: underline;
+	font-weight: 400;
+	font-size: 12px;
+}
+A:hover {
+	COLOR: #000000;
+	TEXT-DECORATION: underline;
+	font-weight: 400;
+	font-size: 12px;
+}
+TD {
+	FONT-SIZE: 18px;
+	height: 15px;
+}
+TH {
+	FONT-SIZE: 11px
+}
+H1 {
+	FONT-SIZE: 16px; COLOR: #2f87b4
+}
+LI {
+	MARGIN-LEFT: 0px; LIST-STYLE-TYPE: none
+}
+.index_welcome {
+	FONT-SIZE: 12px
+}
+.index_welcome H1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; COLOR: #0e8dc4; TEXT-ALIGN: left
+}
+.index_welcome H3 {
+	FONT-SIZE: 11px; FONT-STYLE: italic; TEXT-ALIGN: left
+}
+.blueArrowOnGreyDiscBulletLink {
+	DISPLAY: inline; PADDING-LEFT: 27px; BACKGROUND: url(/images/blueArrowOnGreyDiscBullet.gif) no-repeat 0px 0px; FLOAT: left; LINE-HEIGHT: 19px
+}
+.whiteArrowOnOrangeDiscBulletLink {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 30px; MIN-HEIGHT: 24px; BACKGROUND: url(/images/whiteArrowOnOrangeDiscBullet.gif) no-repeat 0px 0px; FLOAT: left; PADDING-BOTTOM: 0px; LINE-HEIGHT: 18px; PADDING-TOP: 3px
+}
+.468x60-banner {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 0px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px; TEXT-ALIGN: right
+}
+.a_white_text {
+	COLOR: #ffffff
+}
+.a_grey_text {
+	COLOR: #333333
+}
+.footer_nav {
+	FONT-SIZE: 10px; FONT-FAMILY: Arial, sans-serif; HEIGHT: 20px; TEXT-ALIGN: center
+}
+.header_bullets H3 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 12px; PADDING-BOTTOM: 0px; MARGIN: 0px; COLOR: #333333; PADDING-TOP: 0px
+}
+.header_quicklinks {
+	FONT-SIZE: 10px; COLOR: #2f87b4; TEXT-ALIGN: center
+}
+.header_intro {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 12px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+ HTML .boxhead H2 {
+	HEIGHT: 1%
+}
+.blue_box_sidebox {
+	FONT-SIZE: 100%; MARGIN: 0px auto; WIDTH: 100%
+}
+.blue_box_boxhead {
+	BORDER-RIGHT: #bfbfbf 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #bfbfbf 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: #bfbfbf 1px solid; PADDING-TOP: 0px; BORDER-BOTTOM: #bfbfbf 0px solid
+}
+.pageTtl {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 14px; FONT-WEIGHT: bold; FONT-SIZE: 16px; BACKGROUND: url(/images/TtlBoxHdrBg.gif) repeat-x left top; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 633px; COLOR: #fff; LINE-HEIGHT: 27px; PADDING-TOP: 0px
+}
+.blue_box_boxhead H2 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 8px; FONT-WEIGHT: bold; FONT-SIZE: 14px; BACKGROUND: url(/images/TtlBoxHdrBg.gif) repeat-x left top; PADDING-BOTTOM: 0px; MARGIN: 0px; COLOR: #fff; PADDING-TOP: 5px; HEIGHT: 22px
+}
+.blue_box_boxbody {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+.blue_box_boxbody P {
+	BORDER-RIGHT: #ceccca 2px solid; BORDER-TOP: #ceccca 2px solid; BORDER-LEFT: #ceccca 2px solid; BORDER-BOTTOM: #ceccca 2px solid
+}
+.BlueOnGreyTtl {
+	PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 8px; FONT-WEIGHT: bold; FONT-SIZE: 14px; BACKGROUND: #e6e6e6; PADDING-BOTTOM: 0px; MARGIN: 0px; COLOR: #0e8dc4; LINE-HEIGHT: 27px; PADDING-TOP: 0px
+}
+.mn_box_hdr_r {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND-IMAGE: url(http://www.networkcamerareviews.com/images/mn_box_hdr_r.gif); PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BACKGROUND-REPEAT: no-repeat
+}
+.main_headers {
+	PADDING-LEFT: 10px; FONT-WEIGHT: bold; FONT-SIZE: 14px; BACKGROUND-IMAGE: url(http://www.networkcamerareviews.com/images/mn_box_hdr_bg.gif); COLOR: #ffffff; HEIGHT: 29px
+}
+.mn_box_hdr_l {
+	BACKGROUND-IMAGE: url(http://www.networkcamerareviews.com/images/mn_box_hdr_l.gif); BACKGROUND-REPEAT: no-repeat
+}
+.header_phone {
+	PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 21px; FLOAT: right; PADDING-BOTTOM: 0px; MARGIN: 10px 10px 0px 0px; COLOR: #1279ba; PADDING-TOP: 0px; FONT-FAMILY: Helvetica, Arial, sans-serif; TEXT-ALIGN: right
+}
+.header_nav {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 14px; PADDING-BOTTOM: 0px; MARGIN: 0px; LINE-HEIGHT: 27px; PADDING-TOP: 0px; FONT-FAMILY: Arial, sans-serif; HEIGHT: 27px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+.header_nav A {
+	COLOR: #fff
+}
+.header_nav A:hover {
+	COLOR: #fff; TEXT-DECORATION: underline
+}
+.header_ipsource {
+	TEXT-ALIGN: center
+}
+.login_box {
+	PADDING-RIGHT: 10px; FONT-WEIGHT: bold; FONT-SIZE: 14px; HEIGHT: 18px; TEXT-ALIGN: right
+}
+.login_field {
+	FONT-SIZE: 8px; COLOR: #000000
+}
+.sb_headers {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px;PADDING-TOP: 0px; TEXT-ALIGN: center
+}
+.sb_headers H4 {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 14px; PADDING-BOTTOM: 0px; MARGIN: 0px; COLOR: #000000; PADDING-TOP: 6px; HEIGHT: 22px; TEXT-ALIGN: center
+}
+.search_box {
+	PADDING-LEFT: 5px; FONT-SIZE: 11px; HEIGHT: 120px
+}
+#ncr_header_cam_space {
+	PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; FONT-SIZE: 14px; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 0px 200px; WIDTH: 446px! important; COLOR: #646464; PADDING-TOP: 22px; HEIGHT: 126px
+}
+#ncr_header_cam_space H1 {
+	PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 18px; PADDING-BOTTOM: 0px; MARGIN: 0px; COLOR: #646464; PADDING-TOP: 0px
+}
+.welcome {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; COLOR: #2f87b4
+}
+.welcome H1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; MARGIN: 0px; COLOR: #ffffff
+}
+.welcome_statement {
+	FONT-SIZE: 11px
+}
+.copyrightandlink {
+	FONT-SIZE: 10px; FONT-FAMILY: Arial, sans-serif
+}
+.copyrightandlink H2 {
+	FONT-SIZE: 10px; MARGIN: 0px; FONT-FAMILY: Arial, sans-serif
+}
+.knowledge_center {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-SIZE: 11px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.knowledge_center H2 {
+	FONT-WEIGHT: normal; FONT-SIZE: 11px; MARGIN: 0px
+}
+.recently_reviewed_cams {
+	MARGIN-LEFT: 0px
+}
+.newsletter_box {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.index_annc {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.index_news {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.top_five_names {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px; TEXT-ALIGN: center
+}
+.form_input_name {
+	FONT-WEIGHT: bold
+}
+.register_error {
+	FONT-WEIGHT: bold; COLOR: #990000
+}
+.links {
+	FONT-SIZE: 11px
+}
+.links_categories {
+	FONT-SIZE: 1.1em; COLOR: #2f87b4
+}
+.camera_details_title {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #2f87b4
+}
+.camera_details_spec {
+	PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 11px
+}
+.got_term {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px
+}
+.got_explanation {
+	FONT-SIZE: 11px
+}
+.rate_camera_form {
+	PADDING-LEFT: 5px; FONT-SIZE: 11px
+}
+.rate_camera_error {
+	PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 11px
+}
+.camera_ratings {
+	PADDING-LEFT: 5px; FONT-SIZE: 11px
+}
+.camera_rating {
+	PADDING-LEFT: 5px; FONT-SIZE: 11px
+}
+.add_a_review {
+	PADDING-LEFT: 5px; FONT-SIZE: 11px
+}
+.camera_controlbar_links {
+	DISPLAY: block; FONT-WEIGHT: bold; COLOR: #333333; HEIGHT: 6px
+}
+.camera_controlbar_links_current {
+	DISPLAY: block; FONT-WEIGHT: bold; COLOR: #2f87b4; HEIGHT: 6px
+}
+.article_submit {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.red_link {
+	FONT-WEIGHT: bold; COLOR: #b80004
+}
+.camera_compare_select {
+	FONT-SIZE: 9px
+}
+.integrator_services H2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; PADDING-BOTTOM: 4px; MARGIN: 0px
+}
+.camera_listing {
+	VERTICAL-ALIGN: top
+}
+.camera_listing H2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; MARGIN: 0px
+}
+.auto_link_post {
+	COLOR: #333333; TEXT-DECORATION: none
+}
+
+#left_tabs{
+	width:178px;
+	height:25px;
+	margin:0;
+	padding:0px 10px;
+	background-color: #0066FF;
+}
+#left_tabs li{float:left;width:89px;height:25px;display:block;text-align:center;font-size:14px;color:#000000; }
+#left_tabs li span{height:22px;display:block;line-height:22px;width:81px; margin:3px auto 0px auto;cursor:pointer;}
+#left_tabs  li.left_focus span{
+	color:#000000;
+	font-weight:bold;
+	background-color: #8CC6FF;
+}
+.sb_headers h4{cursor:pointer;}
+.left_settings_list2{display:none;}
+.left_settings_focus .left_settings_list2{display:block;}
+.select_style {
+	background-color: #CCCCCC;
+}

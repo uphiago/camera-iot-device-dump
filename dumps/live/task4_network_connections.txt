@@ -1,0 +1,18 @@
+--- netstat -tlnp ---
+netstat -tlnp 2>&1
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      1881/onvif
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1678/ipc_server
+tcp        0      0 0.0.0.0:23              0.0.0.0:*               LISTEN      3565/telnetd
+tcp        0      0 0.0.0.0:554             0.0.0.0:*               LISTEN      1678/ipc_server
+tcp        0      0 0.0.0.0:1935            0.0.0.0:*               LISTEN      1678/ipc_server
+# 
+--- netstat -an | grep ESTABLISHED ---
+netstat -an 2>&1 | grep ESTABLISHED
+tcp        0     37 192.168.1.10:23         192.168.1.18:41748      ESTABLISHED 
+tcp        0      0 127.0.0.1:59151         127.0.0.1:80            ESTABLISHED 
+tcp        0      0 127.0.0.1:80            127.0.0.1:59160         ESTABLISHED 
+tcp        0      0 127.0.0.1:80            127.0.0.1:59151         ESTABLISHED 
+tcp        0      0 127.0.0.1:59160         127.0.0.1:80            ESTABLISHED 
+# 
