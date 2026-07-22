@@ -1,0 +1,19 @@
+README.md
+  s_9b136eeab32680::t_b247368729941d 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "b57a03605e563f71afdd2f4ff52fdd9a8f7009cc",
+  "prompts": {},
+  "sessions": {
+    "s_9b136eeab32680": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_079891c56ffe9B95GJ8Gt4uhBG",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "uphiago <hollyvolks@hotmail.com>"
+    }
+  }
+}
