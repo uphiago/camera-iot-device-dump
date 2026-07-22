@@ -48,7 +48,7 @@ Jul 2026       Full forensic dump, reverse engineering, documentation complete
 ## Tools Used
 
 - **[recon-skills](https://github.com/uphiago/recon-skills)** - 169 offensive security skills for recon and pentest
-- **jefferson** - JFFS2 filesystem extraction
-- **pyelftools + capstone** - ARM ELF parsing and disassembly
-- **Ghidra** - NSA software reverse engineering framework (for follow-up analysis)
+- **[jefferson](https://github.com/onekey-sec/jefferson)** - JFFS2 filesystem extraction
+- **[pyelftools](https://github.com/eliben/pyelftools)** + **[capstone](https://github.com/capstone-engine/capstone)** - ARM ELF parsing and disassembly
+- **[Ghidra](https://github.com/nationalsecurityagency/ghidra)** - NSA software reverse engineering framework
 ```
